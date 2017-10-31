@@ -1,0 +1,99 @@
+.com_cell {
+  background-color: #fff6df;
+  color: #fd9a29;
+  text-align: center;
+}
+
+.material-icons {
+  color: $bgColor;
+  font-size: 0.5rem
+}
+
+.mint-cell-text {
+  font-size: 0.32rem
+}
+.text-right {
+  text-align: right;
+}
+.text-left {
+  text-align: left;
+}
+.com_green {
+  color: #009a61
+}
+.com_gay {
+  color: #9e9e9e
+}
+.com_bro {
+  color: #795548
+}
+.com_divide {
+  width: 100%;
+  background-color: #f3f3f3;
+  border-top: 1px solid #eaeaea;
+}
+.com_more {
+  padding: 10px;
+  background-color: $textColor;
+  color: #fff;
+  margin: 15px;
+  text-align: center;
+}
+.com_btn_style {
+  width: 90%;
+  margin: auto;
+  margin-top: 20px;
+}
+.mint-cell-value {
+  font-size: 0.4rem;
+}
+// 列表共同样式
+.com_list_time {
+  font-size: 0.35rem;
+  color: #ccc;
+  margin-top: 10px;
+  display: inline-block;
+  text-align: left;
+}
+.com_list_title {
+  font-size: 0.45rem;
+  display: inline-block;
+  float: left;
+  line-height: 0.6rem;
+}
+.com_list_content {
+  font-size: 0.35rem;
+  color: #000;
+  letter-spacing: .02rem;
+  line-height: 0.45rem;
+  padding: 0.4rem 0;
+}
+.com_labelStyle {
+  display: inline-block;
+  padding: 5px;
+  background-color: #e5f4ef;
+  color: $textColor;
+}
+
+/* 选择地区弹出框 */
+.select-popup-area-bottom .titleClass {
+  color: #00bd9c
+}
+.select-popup-area-bottom {
+  margin-top: 70px;
+  width: 100%;
+  min-height: 200px;
+  max-height: 400px;
+}
+.select-popup-area-bottom .border-right {
+  border-right: 1px solid #ccc;
+  font-size: 0.3rem;
+  max-height: 400px;
+  overflow: scroll;
+  width: 50%;
+}
+.publish-popup-bottom {
+  width: 100%;
+  max-height: 250px;
+  overflow: scroll;
+}

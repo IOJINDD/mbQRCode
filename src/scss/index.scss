@@ -1,0 +1,14 @@
+/**
+ * 引入文件说明
+ *
+ * base.......................reset文件
+ * font.......................字体文件
+ * variables....................变量存储文件
+ * common....................一些公用的样式
+ *
+*/
+@import 'base.scss';
+@import 'font.scss';
+@import 'variables.scss';
+@import 'layout.scss';
+@import 'common.scss';

@@ -1,0 +1,55 @@
+@import './function';
+
+$myHeaderHeight: 70px;
+$mySidebarWidth: 210px;
+$breadcrumbHeight: 30px;
+
+
+/* Color
+-------------------------- */
+$colorPrimary: #20a0ff;
+$colorPrimaryLight: tint($colorPrimary, 15%);
+$colorPrimaryDark: shade($colorPrimary, 10%);
+$colorSecondary:#25c4a1;
+$colorSuccess:#13ce66;
+$colorWarn:#f7ba2a;
+$colorDanger:#6E4343;
+$colorDark: #000000;
+
+/* Text
+-------------------------- */
+$textColor: rgba(0, 154, 97, 1);;
+$textWhiteColor: #fff;
+$textBreadcrumbColor: #ceced0;
+$textPaginationColor: #fff;
+$textTableColor: #ceced0;
+$textInputColor: #97a8be;
+
+/* Border
+-------------------------- */
+$borderColor: #444547;
+
+/* Background-color
+-------------------------- */
+$bgColor: rgba(0, 154, 97, 1);
+$bgCardColor: rgba(0, 154, 97, 0.5);
+$bgFromColor: rgba(0, 154, 97, 0.8);
+$bgTableColor: rgba(0, 154, 97, 0.4);
+$bgTableHoverColor: rgba(37, 40, 61, 0.7);
+$bgTableHeadColor: rgba(0, 154, 97, 0.7);
+$bgSidebarColor: #393a3c;
+$bgDialogColor: rgba(41, 48, 64, 0.9);
+$bgHeaderColor: $bgSidebarColor;
+$bgBreadcrumbColor: #070709;  // Breadcrumb(面包屑)
+
+/* Dialog
+-------------------------- */
+$dialogHeaderTextColor: #fff;
+$dialogHeaderBgColor: #050505;
+$dialogBodyBgColor: #191919;
+$dialogBoxShadowColor: #545355;
+
+/* Sidebar
+-------------------------- */
+$bgSidebarItemColor: rgba(0, 154, 97, 0.6);
+$bgSidebarCenterInfoColor: $bgCardColor;
