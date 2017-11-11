@@ -8,9 +8,14 @@
   color: $bgColor;
   font-size: 0.5rem
 }
-
+.mint-header {
+  background-color: rgba(0, 154, 97, 1)
+}
+.mint-popup-bottom {
+  width: 100%;
+}
 .mint-cell-text {
-  font-size: 0.32rem
+  font-size: 0.4rem
 }
 .text-right {
   text-align: right;
@@ -19,7 +24,14 @@
   text-align: left;
 }
 .com_green {
-  color: #009a61
+  color: rgba(0, 154, 97, 1)
+}
+.mint-radio-input:checked + .mint-radio-core {
+  background-color: rgba(0, 154, 97, 1);
+  border-color: rgba(0, 154, 97, 1);
+}
+.mint-msgbox-confirm {
+  color: rgba(0, 154, 97, 1);
 }
 .com_gay {
   color: #9e9e9e
@@ -40,9 +52,10 @@
   text-align: center;
 }
 .com_btn_style {
-  width: 90%;
+  width: 80%;
   margin: auto;
   margin-top: 20px;
+  text-align: center;
 }
 .mint-cell-value {
   font-size: 0.4rem;
