@@ -1,10 +1,11 @@
+<!-- 二维码激活 -->
 <template>
   <div id="bind-code">
     <myHead title="二维码激活" icon="aaaa"></myHead>
     <div class="body">
       <div class="from-row">
         <mu-text-field hintText="手机号" type="tel" v-model="formData.mobile" icon="phone_iphone"/><br/>
-        <mu-text-field hintText="验证码" type="text" v-model="formData.code" icon="security"/><br/>
+        <mu-text-field hintText="验证码" type="tel" v-model="formData.code" icon="security"/><br/>
         <span class="get-code" @click="getCode()">
           {{ message }}
         </span>
@@ -17,12 +18,15 @@
 </template>
 <script>
   import myHead from 'components/my-head'
+  import { Toast } from 'mint-ui'
   import { bindQRcode, sendLoginVerifyCode } from 'services/service'
+  let time = 0
   export default {
     data () {
       return {
         bodyHeight: window.screen.height * (1 - 0.35) + 'px',
-        id: this.$route.params.id,
+        id: this.$route.params.qrKey,
+        isInvalid: true,
         hintMessage: '手机号码格式有误', // 提示语
         message: '获取验证码',
         formData: {},
@@ -31,6 +35,9 @@
     },
     methods: {
       bindCode () {
+        let codeData = JSON.parse(window.localStorage.getItem('codeData'))
+        this.formData.id = codeData.id
+        this.formData.qrKey = this.id
         bindQRcode.bind(this)(this.formData).then(res => {
           if (res.code === 200) {
             this.$router.push({
@@ -43,7 +50,7 @@
       getCode () {
         if (!this.isInvalid) {
           this.isInvalid = true
-          sendLoginVerifyCode.bind(this)(this.mobile).then(res => {
+          sendLoginVerifyCode.bind(this)(this.formData.mobile).then(res => {
             if (res.code === 200) {
               Toast(res.msg)
             }
@@ -61,7 +68,22 @@
         } else {
           Toast(this.hintMessage)
         }
-      },
+      }
+    },
+    watch: {
+      'formData.mobile': function (val) {
+        if (!(/^1[3|4|5|7|8]\d{9}$/.test(val))) {
+          if (time === 0) {
+            this.isInvalid = true
+            this.hintMessage = '手机号码格式有误'
+          }
+        } else {
+          if (time === 0) {
+            this.isInvalid = false
+            this.hintMessage = '验证已发送，请稍后再试'
+          }
+        }
+      }
     },
     filters: {
       date (input) {
@@ -72,6 +94,15 @@
         }
       }
     },
+    // beforeRouteEnter (to, from, next) {
+    //   next((vm) => {
+    //     qrNotes.bind(vm)(vm.id).then(res => {
+    //       if (res.code === 200) {
+    //         vm.qrCodeArr = res.dataBody.data
+    //       }
+    //     })
+    //   })
+    // },
     components: {
       myHead
     }
@@ -79,15 +110,8 @@
 </script>
 <style lang="scss">
   #bind-code {
-    position: relative;
-    z-index: 20;
-    color: #fff;
-    padding: 15% 5%;
     .mu-text-field-hint.show {
       color: #ddd;
-    }
-    .mu-text-field-input {
-      color: #e0e0e0;
     }
     .body {
       position: relative;
@@ -106,6 +130,7 @@
       }
       .from-row {
         padding-top: 48px;
+        position: relative;
       }
       .btn-top {
         margin-top: 22px;
@@ -115,9 +140,9 @@
         letter-spacing: 0.3rem;
       }
       .get-code {
-        position: fixed;
-        top: 235px;
-        right: 14%;
+        position: absolute;
+        top: 120px;
+        right: 1%;
         z-index: 20;
         color: #35c590;
         font-size: 0.37rem;

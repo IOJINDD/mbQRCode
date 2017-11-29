@@ -124,6 +124,17 @@ function scanRecord (params) {
   })
 }
 
+/**
+ * 添加二维码拨打记录
+ * @param {*} params
+ */
+function callRecord (params) {
+  return this.$http.post(urls.callRecord, params)
+  .then((resp) => {
+    return resp.data
+  })
+}
+
 export {
   sendLoginVerifyCode,
   checkQRcode,
@@ -134,5 +145,6 @@ export {
   userDetail,
   login,
   scanRecord,
+  callRecord,
   qrNotes
 }

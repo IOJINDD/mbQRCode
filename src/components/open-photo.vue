@@ -33,7 +33,7 @@
     data () {
       return {
         imgDialog: false,
-        screenHeight: window.screen.height - 180,
+        screenHeight: window.screen.height - 240,
         screenWidth: window.screen.width,
         indexImgIn: 0,
         defaultImg,

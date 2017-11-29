@@ -1,14 +1,15 @@
+<!-- 呼叫车主 -->
 <template>
   <div id="call-carer">
     <div class="body">
       <div class="from-row">
         <mu-text-field hintText="手机号" type="tel" v-model="mobile" icon="phone_iphone"/><br/>
-        <mu-text-field hintText="验证码" type="text" v-model="code" icon="security"/><br/>
+        <mu-text-field hintText="验证码" type="tel" v-model="code" icon="security"/><br/>
         <span class="get-code" @click="getCode()">
           {{ message }}
         </span>
       </div>
-      <superCall>
+      <superCall @click.native="call">
 
       </superCall>
     </div>
@@ -16,7 +17,7 @@
 </template>
 <script>
   import { Toast } from 'mint-ui'
-  import { sendLoginVerifyCode, login } from 'services/service'
+  import { sendLoginVerifyCode, login, callRecord } from 'services/service'
   import { checkData } from 'tools/index'
   import superCall from 'components/super-call'
 
@@ -24,10 +25,10 @@
   export default {
     data () {
       return {
-        height: window.screen.height,
-        mobile: '', // 短信登录 手机号
-        code: '', // 短信登录 密码
+        mobile: '', // 呼叫方手机号
+        code: '', // 验证码
         isInvalid: true, // 手机号是否正确
+        qrKey: this.$route.params.qrKey,
         position: {},
         hintMessage: '手机号码格式有误', // 提示语
         message: '获取验证码'
@@ -50,10 +51,6 @@
       }
     },
     methods: {
-      // 切换登录方式
-      handleTabChange (val) {
-        this.activeTab = val
-      },
       // 获取验证码
       getCode () {
         if (!this.isInvalid) {
@@ -77,22 +74,19 @@
           Toast(this.hintMessage)
         }
       },
-      // 验证码登录
-      goMesLogin () {
-        console.log('goMesLogin')
-        console.log(global)
+      // 打电话
+      call () {
+        let mobile = JSON.parse(window.localStorage.getItem('codeData')).mobile
         checkData([this.mobile, this.code], ['手机号不能为空', '验证码不能为空'], () => {
-          login.bind(this)({
-            mobile: this.mobile,
+          callRecord.bind(this)({
             code: this.code,
-            type: 'mobile'
+            codeFlag: 0,
+            fromMobile: this.mobile,
+            qrKey: this.qrKey,
+            toMobile: mobile
           }).then(res => {
             if (res.code === 200) {
-              Toast('登录成功')
-              window.localStorage.setItem('userObj', JSON.stringify(res.dataBody))
-              this.$router.push({
-                name: 'selfCenter'
-              })
+              window.location.href = 'tel:' + mobile
             } else {
               Toast(res.msg)
             }
@@ -117,9 +111,10 @@
       position: relative;
       z-index: 20;
       padding: 0px 10%;
-      padding-top: 100px;
+      padding-top: 10%;
       .from-row {
         margin-bottom: 100px;
+        position: relative;
       }
     }
     .mu-text-field-focus-line {
@@ -130,18 +125,16 @@
     }
     .mu-text-field {
       width: 100%;
-    }
-    .btn-top {
-      margin-top: 22px;
+      font-size: 0.4rem;
     }
     .mu-raised-button-label {
       font-size: 0.4rem;
       letter-spacing: 0.3rem;
     }
     .get-code {
-      position: fixed;
-      top: 173px;
-      right: 12%;
+      position: absolute;
+      top: 71px;
+      right: 0%;
       z-index: 20;
       color: #35c590;
       font-size: 0.37rem;

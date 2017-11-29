@@ -1,21 +1,28 @@
+<!-- 扫码 -->
 <template>
-  <div id="index">
+  <div id="qrCode">
     <bindCode v-if="!isBind">
 
     </bindCode>
     <div v-if="isBind">
       <div v-if="codeType === 'car'">
+        <callCarer>
 
+        </callCarer>
       </div>
       <div v-if="codeType === 'other'">
+        <contactOwner :codeData="codeData">
 
+        </contactOwner>
       </div>
     </div>
   </div>
 </template>
 <script>
   import { checkQRcode } from 'services/service'
-  import bindCode from './bind-code'
+  import bindCode from './children/bind-code'
+  import callCarer from './children/call-carer'
+  import contactOwner from './children/contact-owner'
   import { Toast } from 'mint-ui'
 
   function saveCode (vm) {
@@ -26,7 +33,8 @@
     data () {
       return {
         isBind: true,
-        codeType: 'none'
+        codeData: {}, // 二维码信息
+        codeType: 'none' // 二维码类型
       }
     },
     methods: {
@@ -36,7 +44,9 @@
 
     },
     components: {
-
+      bindCode,
+      contactOwner,
+      callCarer
     },
     mounted () {
 
@@ -47,6 +57,10 @@
           if (res.code === 200) {
             if (res.dataBody && res.dataBody.id) {
               vm.isBind = res.dataBody.isBind
+              vm.codeData = res.dataBody
+              // 保存二维码信息
+              window.localStorage.setItem('codeData', JSON.stringify(res.dataBody))
+
               if (vm.isBind) {
 
                 // 判断什么二维码什么类型
@@ -90,7 +104,10 @@
   }
 </script>
 <style lang="scss">
-  #index {
-
+  #qrCode {
+    position: relative;
+    z-index: 20;
+    color: #fff;
+    padding: 8% 5%;
   }
 </style>

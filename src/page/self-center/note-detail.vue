@@ -12,9 +12,12 @@
         <mu-flexbox-item grow="9">
           <div class="noteBody">
             <!-- <span class="mobile">{{ item.fromMobile }}</span> <br><br> -->
-            <span class="time">{{ item.msgTime | date}}</span>
+            <span class="time">
+              {{ item.msgTime | date}}
+               <mu-icon value="phone_forwarded" :size=30  @click="call(item)"/>
+            </span>
             <div class="content">
-              您好，我捡到您的钱包我我请问请问额我问问问问问问问二位二位问问问
+              {{ item.content }}
             </div>
           </div>
         </mu-flexbox-item>
@@ -40,7 +43,9 @@
       }
     },
     methods: {
-
+      call (val) {
+        window.location.href = 'tel:' + val.fromMobile
+      }
     },
     filters: {
       date (input) {
@@ -71,7 +76,7 @@
     position: relative;
     z-index: 20;
     color: #fff;
-    padding: 15% 5%;
+    padding: 8% 5%;
     .body {
       width: 100%;
       border: 1px solid #fff;
@@ -117,6 +122,9 @@
       }
       .image {
         padding: 20px;
+      }
+      .material-icons {
+        color: #b1a0ce;
       }
     }
   }

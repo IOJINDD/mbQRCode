@@ -38,15 +38,16 @@
   #my-head {
     background: url(../assets/button.png) repeat center top;
     background-size: 100%;
-    padding: 15px;
+    padding: 8px;
     position: relative;
     .title {
       display: inline-block;
-      width: 78%;
+      width: 75%;
       text-align: center;
       position: absolute;
-      font-size: 0.43rem;
-      top: 22px;
+      font-size: 0.5rem;
+      top: 15px;
+      color: #fff;
     }
   }
 </style>

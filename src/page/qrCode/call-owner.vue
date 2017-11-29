@@ -1,6 +1,6 @@
+<!-- 呼叫物主 -->
 <template>
-  <div id="login">
-    <h1>登录</h1>
+  <div id="call-owner">
     <div class="body">
       <div class="from-row">
         <mu-text-field hintText="手机号" type="tel" v-model="mobile" icon="phone_iphone"/><br/>
@@ -9,26 +9,30 @@
           {{ message }}
         </span>
       </div>
-      <div class="btn-top">
-        <mu-raised-button backgroundColor="rgb(53, 197, 144)" label="登录" fullWidth @click="goMesLogin()"/>
+      <superCall message="呼叫物主" @click.native="call">
+
+      </superCall>
+      <div class="goBack" @click="goBack">
+        返回上级>>
       </div>
     </div>
   </div>
 </template>
 <script>
   import { Toast } from 'mint-ui'
-  import { sendLoginVerifyCode, login } from 'services/service'
+  import { sendLoginVerifyCode, login, callRecord } from 'services/service'
   import { checkData } from 'tools/index'
+  import superCall from 'components/super-call'
 
   let time = 0
   export default {
     data () {
       return {
-        height: window.screen.height,
-        mobile: '', // 短信登录 手机号
-        code: '', // 短信登录 密码
+        mobile: '', // 呼叫方手机号
+        code: '', // 验证码
         isInvalid: true, // 手机号是否正确
         position: {},
+        qrKey: this.$route.params.qrKey,
         hintMessage: '手机号码格式有误', // 提示语
         message: '获取验证码'
       }
@@ -50,10 +54,6 @@
       }
     },
     methods: {
-      // 切换登录方式
-      handleTabChange (val) {
-        this.activeTab = val
-      },
       // 获取验证码
       getCode () {
         if (!this.isInvalid) {
@@ -77,20 +77,23 @@
           Toast(this.hintMessage)
         }
       },
-      // 验证码登录
-      goMesLogin () {
+      // 返回上级
+      goBack () {
+        this.$router.go(-1)
+      },
+      // 打电话
+      call () {
+        let mobile = JSON.parse(window.localStorage.getItem('codeData')).mobile
         checkData([this.mobile, this.code], ['手机号不能为空', '验证码不能为空'], () => {
-          login.bind(this)({
-            mobile: this.mobile,
+          callRecord.bind(this)({
             code: this.code,
-            type: 'mobile'
+            codeFlag: 0,
+            fromMobile: this.mobile,
+            qrKey: this.qrKey,
+            toMobile: mobile
           }).then(res => {
             if (res.code === 200) {
-              Toast('登录成功')
-              window.localStorage.setItem('userObj', JSON.stringify(res.dataBody))
-              this.$router.push({
-                name: 'selfCenter'
-              })
+              window.location.href = 'tel:' + mobile
             } else {
               Toast(res.msg)
             }
@@ -98,66 +101,59 @@
         })
       }
     },
-    mounted () {
-      if (window.localStorage.getItem('userObj')) {
-        this.$router.push({
-          name: 'selfCenter'
-        })
-      }
+    components: {
+      superCall
     }
   }
 </script>
 <style lang="scss">
-  #login {
+  #call-owner {
+    position: relative;
+    z-index: 20;
+    color: #fff;
+    padding: 8% 5%;
     .mu-text-field-hint.show {
       color: #ddd;
     }
     .mu-text-field-input {
       color: #e0e0e0;
     }
-    h1 {
-      z-index: 20;
-      color: #fff;
-      position: relative;
-      text-align: center;
-      padding-top: 100px;
-      font-size: 1rem;
-      letter-spacing: 1rem;
-      margin-left: 1rem;
-    }
     .body {
       position: relative;
       z-index: 20;
       padding: 0px 10%;
-    }
-    .mu-text-field-focus-line {
-      background-color: rgb(53, 197, 144);
-    }
-    .mu-text-field.focus-state {
-      color: rgb(53, 197, 144);
-    }
-    .mu-text-field {
-      width: 100%;
-    }
-    .from-row {
-      margin-top: 48px;
-      position: relative;
-    }
-    .btn-top {
-      margin-top: 22px;
-    }
-    .mu-raised-button-label {
-      font-size: 0.4rem;
-      letter-spacing: 0.3rem;
-    }
-    .get-code {
-      position: absolute;
-      top: 72px;
-      right: 2%;
-      z-index: 20;
-      color: #35c590;
-      font-size: 0.37rem;
-      font-weight: 100;
+      padding-top: 10%;
+      .from-row {
+        margin-bottom: 100px;
+        position: relative;
+      }
+      .mu-text-field-focus-line {
+        background-color: rgb(53, 197, 144);
+      }
+      .mu-text-field.focus-state {
+        color: rgb(53, 197, 144);
+      }
+      .mu-text-field {
+        width: 100%;
+        font-size: 0.4rem;
+      }
+      .mu-raised-button-label {
+        font-size: 0.4rem;
+        letter-spacing: 0.3rem;
+      }
+      .get-code {
+        position: absolute;
+        top: 71px;
+        right: 0%;
+        z-index: 20;
+        color: #35c590;
+        font-size: 0.37rem;
+        font-weight: 100;
+      }
+      .goBack {
+        text-align: center;
+        margin-top: 80px;
+      }
     }
   }
 </style>

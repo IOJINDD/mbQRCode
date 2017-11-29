@@ -1,30 +1,25 @@
 <template>
-  <div id="self-center">
-    <div class="head" @click="goSelfInfo">
-      <h1>个人中心</h1>
+  <div id="self-info">
+    <div class="head">
+      <h1>个人信息</h1>
       <h3>
         {{ userObj.mobilePhone }}
       </h3>
     </div>
     <div class="body" :style="{ height: bodyHeight }">
-      <mu-list>
-        <mu-list-item :title="'我的二维码（' + userObj.list.length + ')'" toggleNested v-if="userObj.list">
-          <mu-list-item slot="nested" :title="item.serial"
-                        v-for="item,index in userObj.list"
-                        key="item"
-                        @click.native="openCode(item)">
-            <span slot="right" class="span">留言：{{ item.num }}</span>
-            <mu-icon value="keyboard_arrow_right" slot="right"/>
-          </mu-list-item>
-        </mu-list-item>
-      </mu-list>
-      <div class="btn-top">
+      <mu-text-field hintText="姓名" type="text" icon="person"/><br/>
+      <mu-select-field v-model="game1" icon="people_outline" hintText="性别">
+        <mu-menu-item value="1" title="男"/>
+        <mu-menu-item value="2" title="女"/>
+      </mu-select-field>
+      <mu-text-field hintText="留言" multiLine :rows="3" :rowsMax="6" icon="comment"/><br/>
+      <!-- <div class="btn-top">
         <mu-raised-button backgroundColor="rgb(53, 197, 144)"
                           color="#fff"
                           label="退出登录"
                           fullWidth
                           @click="signOut()"/>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -55,12 +50,6 @@
         this.$router.push({
           name: 'login'
         })
-      },
-      // 跳转个人信息页
-      goSelfInfo () {
-        // this.$router.push({
-        //   name: 'selfInfo'
-        // })
       }
     },
     beforeRouteEnter (to, from, next) {
@@ -81,7 +70,7 @@
   }
 </script>
 <style lang="scss">
-  #self-center {
+  #self-info {
     position: relative;
     z-index: 20;
     color: #fff;
@@ -105,9 +94,16 @@
       background-color: #fff;
       width: 100%;
       overflow: scroll;
-      .span {
-        font-size: 0.34rem;
-        color: #787878;
+      .mu-text-field-content {
+        padding-top: 8px;
+      }
+      .mu-text-field-input {
+        color: #888;
+        font-size: 0.4rem;
+      }
+      .mu-dropDown-menu-text-overflow {
+        color: #888;
+        font-size: 0.4rem;
       }
       .material-icons {
         color: #9e9e9e;

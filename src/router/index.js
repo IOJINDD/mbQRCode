@@ -9,9 +9,11 @@ import HelloWorld from '@/components/HelloWorld'
 import login from 'page/login/login'
 import selfCenter from 'page/self-center/self-center'
 import noteDetail from 'page/self-center/note-detail'
-import bindCode from 'page/bind-code/bind-code'
+import selfInfo from 'page/self-center/self-info'
+// import bindCode from 'page/bind-code/bind-code'
 import qrCode from 'page/qrCode/qrCode'
-import callCarer from 'page/qrCode/call-carer'
+import callOwner from 'page/qrCode/call-owner'
+import leavingMessage from 'page/qrCode/leaving-message'
 
 Vue.use(Router)
 
@@ -20,7 +22,7 @@ export default new Router({
     {
       path: '/',
       name: 'Hello',
-      redirect: '/index',
+      redirect: '/login',
       component: HelloWorld
     }, {
       path: '/qrCode/:qrKey',
@@ -33,6 +35,9 @@ export default new Router({
     }, {
       path: '/selfCenter',
       name: 'selfCenter',
+      meta: {
+        keepAlive: true
+      },
       component: selfCenter // 个人中心
     }, {
       path: '/bindSuccess',
@@ -47,17 +52,17 @@ export default new Router({
       name: 'noteDetail',
       component: noteDetail // 留言详情
     }, {
-      path: '/noteDetail/:id',
-      name: 'noteDetail',
-      component: noteDetail // 留言详情
+      path: '/callOwner/:qrKey',
+      name: 'callOwner',
+      component: callOwner // 给物主打电话
     }, {
-      path: '/bindCode/:id',
-      name: 'bindCode',
-      component: bindCode // 绑定二维码
+      path: '/leavingMessage/:qrKey',
+      name: 'leavingMessage',
+      component: leavingMessage // 给物主留言
     }, {
-      path: '/callCarer',
-      name: 'callCarer',
-      component: callCarer // 呼叫车主
+      path: '/selfInfo',
+      name: 'selfInfo',
+      component: selfInfo // 个人信息
     }
   ]
 })
