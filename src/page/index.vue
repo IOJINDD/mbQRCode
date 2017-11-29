@@ -41,6 +41,7 @@
           mobile: '', // 短信登录 手机号
           code: '', // 短信登录 密码
           isInvalid: true, // 手机号是否正确
+          position: {},
           hintMessage: '手机号码格式有误', // 提示语
           message: '获取验证码'
         }
@@ -71,7 +72,7 @@
           if (!this.isInvalid) {
             this.isInvalid = true
             sendLoginVerifyCode.bind(this)(this.mobile, 'LOGIN').then(res => {
-              if (res.code === '200') {
+              if (res.code === 200) {
                 Toast(res.msg)
               }
               time = 60
@@ -91,6 +92,8 @@
         },
         // 密码登录
         goPsdLogin () {
+          console.log('goPsdLogin')
+          console.log(global)
           checkData([this.psd_phone, this.psd_password], ['手机号不能为空', '密码不能为空'], () => {
             login.bind(this)({
               username: this.psd_phone,
@@ -102,13 +105,15 @@
         },
         // 验证码登录
         goMesLogin () {
+          console.log('goMesLogin')
+          console.log(global)
           checkData([this.mobile, this.code], ['手机号不能为空', '验证码不能为空'], () => {
             login.bind(this)({
               mobile: this.mobile,
               code: this.code,
               type: 'mobile'
             }).then(res => {
-              if (res.code === '200') {
+              if (res.code === 200) {
                 Toast('登录成功')
                 window.localStorage.setItem('userObj', JSON.stringify(res.dataBody))
                 this.$router.push({
@@ -122,7 +127,11 @@
         }
       },
       mounted () {
-
+        if (window.localStorage.getItem('userObj')) {
+          this.$router.push({
+            name: 'selfCenter'
+          })
+        }
       }
     }
   </script>
@@ -137,7 +146,7 @@
         color: #9fa3b0;
       }
       .mu-tab-active {
-        color: #414a60;
+        color: $borderColor;
       }
       .mu-tab-link-highlight {
         background-color: $borderColor;

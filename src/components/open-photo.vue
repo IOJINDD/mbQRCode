@@ -3,7 +3,7 @@
     <swipe :auto="5000" class="my-swipe" :style="{height: swipeHeight}" v-if="imgPaths">
         <swipe-item v-for="path,index in imgPaths " v-if="imgPaths.length > 0" :key="path">
           <div :style="{width: screenWidth + 'px', height: screenWidth + 'px', overflow: 'hidden', margin: 'auto'}">
-            <img :src="path" alt="" width="100%" @click="previewImage(imgPaths)">
+            <img :src="path" alt="" width="100%" @click="openPhoto(index)">
           </div>
         </swipe-item>
         <swipe-item v-if="imgPaths.length == 0" key="path" style="text-align: center;">

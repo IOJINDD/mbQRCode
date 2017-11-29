@@ -29,7 +29,7 @@
         if (!this.isInvalid) {
           this.isInvalid = true
           sendLoginVerifyCode.bind(this)(this.mobile).then(res => {
-            if (res.code === '200') {
+            if (res.code === 200) {
               Toast(res.msg)
             }
             time = 60
@@ -46,6 +46,10 @@
         } else {
           Toast(this.hintMessage)
         }
+      },
+      init () {
+        this.mobile = ''
+        this.code = ''
       }
     },
     props: {
@@ -82,7 +86,7 @@
     width: 80px;
     height: 30px;
     line-height: 30px;
-    background-color: rgba(0, 154, 97, 1);
+    background-color: rgb(53, 197, 144);
     color: #fff;
     text-align: center;
     border-radius: 10px;

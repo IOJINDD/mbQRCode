@@ -94,10 +94,31 @@ function login (params) {
 
 /**
  * 查看留言
- * @param {*} qrCode
+ * @param {*} serial
  */
-function qrNotes (qrCode) {
-  return this.$http.get(urls.qrNotes + '?pageNo=1&pageSize=1000&qrCode=' + qrCode)
+function qrNotes (serial) {
+  return this.$http.get(urls.qrNotes + '?pageNo=1&pageSize=1000&serial=' + serial)
+  .then((resp) => {
+    return resp.data
+  })
+}
+
+/**
+ * 获取用户详情
+ */
+function userDetail (id) {
+  return this.$http.get(urls.userDetail + '?userId=' + id)
+  .then((resp) => {
+    return resp.data
+  })
+}
+
+/**
+ * 检测二维码是否被绑定
+ * @param {*} params
+ */
+function scanRecord (params) {
+  return this.$http.post(urls.scanRecord, params)
   .then((resp) => {
     return resp.data
   })
@@ -110,6 +131,8 @@ export {
   doubleCall,
   publishNote,
   MultipartFile,
+  userDetail,
   login,
+  scanRecord,
   qrNotes
 }

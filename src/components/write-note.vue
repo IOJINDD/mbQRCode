@@ -8,10 +8,18 @@
             type="textarea" rows="4"
             v-model="writeData.content"></mt-field>
       <!-- <mt-field label="图片"> -->
-      <uploadImg @imgPaths="imgPaths"></uploadImg>
+      <uploadImg @imgPaths="imgPaths"
+                  ref="uploadImg">
+
+      </uploadImg>
 
       <!-- </mt-field> -->
-      <getCode @code="getCode" @mobile="getMobile" label="手机*"></getCode>
+      <getCode @code="getCode"
+                @mobile="getMobile"
+                label="手机*"
+                ref="getCode">
+
+      </getCode>
       <div class="com_btn_style">
         <mt-button type="default"
                   size="normal"
@@ -29,7 +37,25 @@
   import getCode from 'components/get-code'
   import { Toast } from 'mint-ui'
   import { checkData, getCheckCode } from 'tools/index'
-  import { publishNote }from 'services/service'
+  import { publishNote, scanRecord }from 'services/service'
+
+  function saveCode (vm) {
+    let infoJson = {
+      createTime: new Date().getTime(), // 创建时间
+      userAgent: navigator.userAgent // 手机型号
+    }
+    scanRecord.bind(vm)({
+      qrKey: vm.writeData.qrCode,
+      area: global.area,
+      city: global.city,
+      street: global.street,
+      province: global.province,
+      codeType: vm.qrCodeType,
+      infoJson: JSON.stringify(infoJson)
+    }).then(res => {
+
+    })
+  }
 
   export default {
     data () {
@@ -44,6 +70,7 @@
           code: '', // 验证码
           fromMobile: '', // 留言者手机号
         },
+        qrCodeType: this.$route.query.type, // 二维码类型
         popupSex: false // 性别弹出框
       }
     },
@@ -65,9 +92,15 @@
         let params = [this.writeData.content, this.writeData.fromMobile, this.writeData.code]
         let toasts = ['内容不能为空', '手机号不能为空', '验证码不能为空']
         checkData(params, toasts, () => {
+
+          // 保存扫码信息
+          saveCode(this)
           publishNote.bind(this)(this.writeData).then(res => {
             getCheckCode(res, () => {
               Toast('提交成功')
+              this.writeData = {}
+              this.$refs.getCode.init()
+              this.$refs.uploadImg.init()
               this.$emit('writePop', '')
             }, () => {
               Toast(res.msg)

@@ -76,7 +76,7 @@
               let formData = new FormData()
               formData.append('image', a, that.imgName)
               MultipartFile.bind(that)(formData, 'note').then(res => {
-                if (res.code === '200') {
+                if (res.code === 200) {
                   that.images.push(res.dataBody)
                   that.$emit('imgPaths', that.images)
                 } else {
@@ -95,6 +95,9 @@
             array.push(binary.charCodeAt(i))
           }
           return new Blob([new Uint8Array(array)], {type: type})
+        },
+        init () {
+          this.images = []
         }
       }
     }

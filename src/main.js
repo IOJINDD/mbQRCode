@@ -1,15 +1,15 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+import Vue from 'vue'
+import App from './App'
+// import vueg from 'vueg'
+import router from './router'
 import MintUI from 'mint-ui'
 import MuseUI from 'muse-ui'
 import 'mint-ui/lib/style.css'
 import 'muse-ui/dist/muse-ui.css'
 import axios from 'axios'
 import { Indicator, Toast } from 'mint-ui'
-import Vue from 'vue'
-import App from './App'
-// import vueg from 'vueg'
-import router from './router'
 import 'scss/index.scss'
 
 Vue.config.productionTip = false
@@ -20,7 +20,7 @@ Vue.use(MuseUI)
 
 router.beforeEach((to, from, next) => {
   if (to.meta) {
-    window.document.title = to.meta.title || '一号一码'
+    window.document.title = to.meta.title || 'e码领先'
   }
   next()
 })
