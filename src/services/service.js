@@ -63,8 +63,8 @@ function bindQRcode (data) {
  * @param {*} phone - 主叫号码
  * @param {*} qrKey - 二维码id
  */
-function doubleCall (code, phone, qrKey) {
-  return this.$http.get(urls.doubleCall + '?code=' + code + '&qrKey='+ qrKey + '&mobile=' + phone)
+function doubleCall (code, phone, qrKey, codeFlag) {
+  return this.$http.get(urls.doubleCall + '?code=' + code + '&qrKey='+ qrKey + '&mobile=' + phone + '&codeFlag=' + codeFlag)
     .then((resp) => {
       return resp.data
     })
@@ -106,8 +106,9 @@ function qrNotes (serial) {
 /**
  * 获取用户详情
  */
-function userDetail (id) {
-  return this.$http.get(urls.userDetail + '?userId=' + id)
+function userDetail (id, type) {
+  type = type || ''
+  return this.$http.get(urls.userDetail + '?userId=' + id + '&type=' + type)
   .then((resp) => {
     return resp.data
   })
@@ -135,6 +136,16 @@ function callRecord (params) {
   })
 }
 
+/**
+ * 保存信息
+ */
+function saveInfo (params) {
+  return this.$http.put(urls.saveInfo, params)
+  .then((resp) => {
+    return resp.data
+  })
+}
+
 export {
   sendLoginVerifyCode,
   checkQRcode,
@@ -146,5 +157,6 @@ export {
   login,
   scanRecord,
   callRecord,
-  qrNotes
+  qrNotes,
+  saveInfo
 }

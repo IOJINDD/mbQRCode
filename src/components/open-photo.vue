@@ -34,10 +34,10 @@
       return {
         imgDialog: false,
         screenHeight: window.screen.height - 240,
-        screenWidth: window.screen.width,
+        screenWidth: window.screen.width - 100,
         indexImgIn: 0,
         defaultImg,
-        swipeHeight: '200px'
+        swipeHeight: '150px'
       }
     },
     methods: {

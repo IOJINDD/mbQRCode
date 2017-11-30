@@ -8,6 +8,7 @@ const uris = {
   scanRecord: '/api/qr/scanRecord', // 保存二维码扫码情况
   callRecord: '/api/qr/call-record', // 添加二维码拨打记录
   login: '/api/qr/login', // 登录
+  saveInfo: '/api/qr/user', // 保存
   qrNotes: '/api/qr/notes', // 查看留言
   checkQRcode: '/api/qr/verification' // 检测用户
 }

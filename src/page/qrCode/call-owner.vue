@@ -2,14 +2,19 @@
 <template>
   <div id="call-owner">
     <div class="body">
-      <div class="from-row">
+      <div class="from-row" v-if="!isLogin">
         <mu-text-field hintText="手机号" type="tel" v-model="mobile" icon="phone_iphone"/><br/>
         <mu-text-field hintText="验证码" type="tel" v-model="code" icon="security"/><br/>
         <span class="get-code" @click="getCode()">
           {{ message }}
         </span>
       </div>
-      <superCall message="呼叫物主" @click.native="call">
+      <div :style="{height: height + 'px'}" v-if="isLogin">
+
+      </div>
+      <superCall :mobile="mobile"
+                  :isLogin="isLogin"
+                  :code="code" >
 
       </superCall>
       <div class="goBack" @click="goBack">
@@ -20,8 +25,7 @@
 </template>
 <script>
   import { Toast } from 'mint-ui'
-  import { sendLoginVerifyCode, login, callRecord } from 'services/service'
-  import { checkData } from 'tools/index'
+  import { sendLoginVerifyCode, login } from 'services/service'
   import superCall from 'components/super-call'
 
   let time = 0
@@ -32,7 +36,8 @@
         code: '', // 验证码
         isInvalid: true, // 手机号是否正确
         position: {},
-        qrKey: this.$route.params.qrKey,
+        height: window.screen.height / 4,
+        isLogin: false,
         hintMessage: '手机号码格式有误', // 提示语
         message: '获取验证码'
       }
@@ -80,26 +85,13 @@
       // 返回上级
       goBack () {
         this.$router.go(-1)
-      },
-      // 打电话
-      call () {
-        let mobile = JSON.parse(window.localStorage.getItem('codeData')).mobile
-        checkData([this.mobile, this.code], ['手机号不能为空', '验证码不能为空'], () => {
-          callRecord.bind(this)({
-            code: this.code,
-            codeFlag: 0,
-            fromMobile: this.mobile,
-            qrKey: this.qrKey,
-            toMobile: mobile
-          }).then(res => {
-            if (res.code === 200) {
-              window.location.href = 'tel:' + mobile
-            } else {
-              Toast(res.msg)
-            }
-          })
-        })
       }
+    },
+    mounted () {
+      if (JSON.parse(window.localStorage.getItem('userObj'))) {
+        this.isLogin = true
+      }
+      console.log(this.isLogin)
     },
     components: {
       superCall
@@ -121,8 +113,6 @@
     .body {
       position: relative;
       z-index: 20;
-      padding: 0px 10%;
-      padding-top: 10%;
       .from-row {
         margin-bottom: 100px;
         position: relative;
@@ -152,7 +142,7 @@
       }
       .goBack {
         text-align: center;
-        margin-top: 80px;
+        margin-top: 40px;
       }
     }
   }

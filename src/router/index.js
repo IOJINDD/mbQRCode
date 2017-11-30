@@ -22,7 +22,7 @@ export default new Router({
     {
       path: '/',
       name: 'Hello',
-      redirect: '/login',
+      redirect: '/index',
       component: HelloWorld
     }, {
       path: '/qrCode/:qrKey',
@@ -31,10 +31,6 @@ export default new Router({
     }, {
       path: '/index',
       name: 'index',
-      component: index
-    }, {
-      path: '/selfCenter',
-      name: 'selfCenter',
       meta: {
         keepAlive: true
       },

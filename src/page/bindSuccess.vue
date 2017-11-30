@@ -20,7 +20,7 @@
     methods: {
       goIndex () {
         this.$router.push({
-          name: 'login'
+          name: 'index'
         })
       },
       goShop () {

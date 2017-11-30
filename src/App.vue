@@ -6,12 +6,12 @@
     </keep-alive>
     <router-view v-if="!$route.meta.keepAlive"></router-view>
     <div class="bottom">
-      <a href="http://www.miibeian.gov.cn/">
+      <a href="javascript:">
         <img src="./assets/police.png" alt="" width="16px" height="16px">
         浙公网安备：33010802008316号
       </a>
       <br>
-      <a href="http://www.miibeian.gov.cn/">
+      <a href="javascript:">
         ICP备案：浙ICP备17024899号-1
       </a>
     </div>

@@ -89,7 +89,7 @@
               Toast('登录成功')
               window.localStorage.setItem('userObj', JSON.stringify(res.dataBody))
               this.$router.push({
-                name: 'selfCenter'
+                name: 'index'
               })
             } else {
               Toast(res.msg)
@@ -101,7 +101,7 @@
     mounted () {
       if (window.localStorage.getItem('userObj')) {
         this.$router.push({
-          name: 'selfCenter'
+          name: 'index'
         })
       }
     }

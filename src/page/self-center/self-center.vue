@@ -58,9 +58,9 @@
       },
       // 跳转个人信息页
       goSelfInfo () {
-        // this.$router.push({
-        //   name: 'selfInfo'
-        // })
+        this.$router.push({
+          name: 'selfInfo'
+        })
       }
     },
     beforeRouteEnter (to, from, next) {

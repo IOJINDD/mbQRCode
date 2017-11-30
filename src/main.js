@@ -52,6 +52,11 @@ new Vue({
   components: { App }
 })
 
+if (window.localStorage.getItem('userObj')) {
+  global.mobilePhone = JSON.parse(window.localStorage.getItem('userObj')).mobilePhone
+  console.log(global.mobilePhone)
+}
+
 Date.prototype.format = function(format) {
   var o = {
   'M+': this.getMonth()+1, //month

@@ -7,29 +7,41 @@
       </h3>
     </div>
     <div class="body" :style="{ height: bodyHeight }">
-      <mu-text-field hintText="姓名" type="text" icon="person"/><br/>
-      <mu-select-field v-model="game1" icon="people_outline" hintText="性别">
-        <mu-menu-item value="1" title="男"/>
-        <mu-menu-item value="2" title="女"/>
+      <mu-text-field hintText="姓名" type="text" icon="person" v-model="userObj.realName"/><br/>
+      <mu-select-field v-model="userObj.sex" icon="people_outline" hintText="性别">
+        <mu-menu-item value="男" title="男"/>
+        <mu-menu-item value="女" title="女"/>
       </mu-select-field>
-      <mu-text-field hintText="留言" multiLine :rows="3" :rowsMax="6" icon="comment"/><br/>
-      <!-- <div class="btn-top">
+      <mu-list>
+        <mu-list-item :title="'二维码：' + item.serial" toggleNested v-for="item,index in userObj.eqrCodes" key="item" :open=false>
+          <mu-list-item slot="nested">
+            <mu-text-field hintText="留言"
+                          multiLine
+                          v-model="item.note"
+                          :rows="3" :rowsMax="6" icon="comment"/>
+          </mu-list-item>
+        </mu-list-item>
+      </mu-list>
+      <!-- <mu-text-field hintText="留言" multiLine :rows="3" :rowsMax="6" icon="comment"/><br/> -->
+      <div class="btn-top">
         <mu-raised-button backgroundColor="rgb(53, 197, 144)"
                           color="#fff"
-                          label="退出登录"
+                          label="保存信息"
                           fullWidth
-                          @click="signOut()"/>
-      </div> -->
+                          @click="saveInfo()"/>
+      </div>
     </div>
   </div>
 </template>
 <script>
-  import { userDetail } from 'services/service'
+  import { userDetail, saveInfo } from 'services/service'
+  import { Toast } from 'mint-ui'
   export default {
     data () {
       return {
         bodyHeight: window.screen.height * (1 - 0.4) + 'px',
-        userObj: {}
+        userObj: {},
+        sex: '' // 性别
       }
     },
     methods: {
@@ -45,10 +57,12 @@
         }
       },
       // 退出登录
-      signOut () {
-        window.localStorage.removeItem('userObj')
-        this.$router.push({
-          name: 'login'
+      saveInfo () {
+        saveInfo.bind(this)(this.userObj).then(res => {
+          if (res.code === 200) {
+            Toast('保存成功')
+            this.$router.go(-1)
+          }
         })
       }
     },
@@ -56,7 +70,7 @@
       next((vm) => {
         if (JSON.parse(window.localStorage.getItem('userObj'))) {
           let id  = JSON.parse(window.localStorage.getItem('userObj')).id
-          userDetail.bind(vm)(id).then(res => {
+          userDetail.bind(vm)(id, 'codes').then(res => {
             vm.userObj = res.dataBody
           })
 
@@ -111,12 +125,24 @@
       }
       .mu-item-title {
         color: #787878;
-        font-size: 0.34rem
+        font-size: 0.4rem
       }
       .mu-item {
         padding: 0px;
         margin: 0px 20px;
         border-bottom: 1px solid #ccc;
+        .material-icons {
+          font-size: 0.46rem;
+        }
+        .mu-text-field.has-icon {
+          padding-left: 45px;
+        }
+        .mu-text-field.has-icon .mu-text-field-line {
+          left: 45px;
+        }
+        .mu-text-field.has-icon .mu-text-field-focus-line {
+          left: 45px;
+        }
       }
       .mu-item-right {
         right: 0px

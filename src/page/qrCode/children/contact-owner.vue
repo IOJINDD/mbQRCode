@@ -24,14 +24,15 @@
           个人中心>>
       </div>
     </div>
-    <div class="service">
-      <img src="../../../assets/service.png" alt="" width="100%" @click="goShop" height="80%">
-    </div>
+    <service>
+
+    </service>
   </div>
 </template>
 <script>
   import myHead from 'components/my-head'
   import { bindQRcode, sendLoginVerifyCode } from 'services/service'
+  import service from 'components/service'
   export default {
     data () {
       return {
@@ -62,14 +63,10 @@
           }
         })
       },
-      // 跳转商城
-      goShop () {
-        window.location.href = 'https://h5.youzan.com/v2/showcase/homepage?alias=bt4oehte'
-      },
       // 跳转个人中心
       goCenter () {
         this.$router.push({
-          name: 'login'
+          name: 'index'
         })
       }
     },
@@ -79,7 +76,8 @@
       }
     },
     components: {
-      myHead
+      myHead,
+      service
     }
   }
 </script>
@@ -112,10 +110,6 @@
         text-align: center;
         padding-bottom: 20px;
       }
-    }
-    .service {
-      margin-top: 20px;
-      width: 100%;
     }
   }
 </style>

@@ -19,7 +19,7 @@
 <script>
   import myHead from 'components/my-head'
   import { Toast } from 'mint-ui'
-  import { bindQRcode, sendLoginVerifyCode } from 'services/service'
+  import { bindQRcode, sendLoginVerifyCode, login } from 'services/service'
   let time = 0
   export default {
     data () {
@@ -40,8 +40,19 @@
         this.formData.qrKey = this.id
         bindQRcode.bind(this)(this.formData).then(res => {
           if (res.code === 200) {
-            this.$router.push({
-              name: 'bindSuccess'
+            login.bind(this)({
+              mobile: this.formData.mobile,
+              code: this.formData.code,
+              type: 'mobile'
+            }).then(res => {
+              if (res.code === 200) {
+                window.localStorage.setItem('userObj', JSON.stringify(res.dataBody))
+                this.$router.push({
+                  name: 'bindSuccess'
+                })
+              } else {
+                Toast(res.msg)
+              }
             })
           }
         })

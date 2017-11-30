@@ -2,24 +2,43 @@
 <template>
   <div id="call-carer">
     <div class="body">
-      <div class="from-row">
+      <div class="from-row" v-if="!isLogin && !isLimit">
         <mu-text-field hintText="手机号" type="tel" v-model="mobile" icon="phone_iphone"/><br/>
         <mu-text-field hintText="验证码" type="tel" v-model="code" icon="security"/><br/>
         <span class="get-code" @click="getCode()">
           {{ message }}
         </span>
       </div>
-      <superCall @click.native="call">
+      <div :style="{height: height + 'px'}" v-if="isLogin">
 
-      </superCall>
+      </div>
+      <div v-if="!isLimit">
+        <superCall :mobile="mobile"
+                   :isLogin="isLogin"
+                   :code="code" >
+
+        </superCall>
+      </div>
+      <div class="center" @click="goCenter">
+          个人中心>>
+      </div>
     </div>
+    <div style="height: 50px;" v-if="isLogin">
+
+    </div>
+    <div style="height: 30px;" v-if="!isLogin">
+
+    </div>
+    <service>
+
+    </service>
   </div>
 </template>
 <script>
   import { Toast } from 'mint-ui'
-  import { sendLoginVerifyCode, login, callRecord } from 'services/service'
-  import { checkData } from 'tools/index'
+  import { sendLoginVerifyCode, login } from 'services/service'
   import superCall from 'components/super-call'
+  import service from 'components/service'
 
   let time = 0
   export default {
@@ -28,8 +47,9 @@
         mobile: '', // 呼叫方手机号
         code: '', // 验证码
         isInvalid: true, // 手机号是否正确
-        qrKey: this.$route.params.qrKey,
+        height: window.screen.height / 5,
         position: {},
+        isLogin: false, // 判断是否登录
         hintMessage: '手机号码格式有误', // 提示语
         message: '获取验证码'
       }
@@ -47,6 +67,14 @@
             this.isInvalid = false
             this.hintMessage = '验证已发送，请稍后再试'
           }
+        }
+      }
+    },
+    props: {
+      isLimit: {
+        type: Boolean,
+        default () {
+          return false
         }
       }
     },
@@ -74,28 +102,22 @@
           Toast(this.hintMessage)
         }
       },
-      // 打电话
-      call () {
-        let mobile = JSON.parse(window.localStorage.getItem('codeData')).mobile
-        checkData([this.mobile, this.code], ['手机号不能为空', '验证码不能为空'], () => {
-          callRecord.bind(this)({
-            code: this.code,
-            codeFlag: 0,
-            fromMobile: this.mobile,
-            qrKey: this.qrKey,
-            toMobile: mobile
-          }).then(res => {
-            if (res.code === 200) {
-              window.location.href = 'tel:' + mobile
-            } else {
-              Toast(res.msg)
-            }
-          })
+      // 跳转个人中心
+      goCenter () {
+        this.$router.push({
+          name: 'index'
         })
       }
     },
+    mounted () {
+      if (global.mobilePhone) {
+        this.isLogin = true
+      }
+      console.log(this.isLogin)
+    },
     components: {
-      superCall
+      superCall,
+      service
     }
   }
 </script>
@@ -113,8 +135,12 @@
       padding: 0px 10%;
       padding-top: 10%;
       .from-row {
-        margin-bottom: 100px;
+        margin-bottom: 16%;
         position: relative;
+      }
+      .center {
+        text-align: center;
+        padding-top: 40px;
       }
     }
     .mu-text-field-focus-line {
