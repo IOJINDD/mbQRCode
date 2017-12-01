@@ -65,9 +65,18 @@
               // 保存二维码信息
               window.localStorage.setItem('codeData', JSON.stringify(res.dataBody))
 
+              let codeTime
               // 判断是否有存储扫描二维码时间
-              if (window.localStorage.getItem('setCodeTime')) {
+              if (!window.localStorage.getItem('setCodeTime')) {
                 window.localStorage.setItem('setCodeTime', new Date().getTime())
+              } else {
+                // 判断是否24小时
+                codeTime = window.localStorage.getItem('setCodeTime')
+                let nowTime = new Date().getTime()
+                if (codeTime + 60000 < nowTime) {
+                  window.localStorage.removeItem('qrKeyArr')
+                  window.localStorage.setItem('setCodeTime', new Date().getTime())
+                }
               }
 
               if (vm.isBind) {
@@ -86,7 +95,7 @@
                             i = i - 1
                         }
                     }
-                    if (qrKeyArr.length > 3) {
+                    if (qrKeyArr.length > 9) {
                       vm.isLimit = true
                       Toast('今日扫码已上限！')
                     } else {

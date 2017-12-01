@@ -62,6 +62,7 @@
       return {
         isInvalid: true, // 手机号码是否正确
         hintMessage: '手机号码格式有误',
+        isLogin: false,
         writeData: {
           qrCode: this.$route.params.qrKey,
           fromSex: '', // 留言者性别
@@ -135,6 +136,12 @@
         } else {
           this.isInvalid = false
         }
+      }
+    },
+    mounted () {
+      console.log(global.mobilePhone)
+      if (global.mobilePhone) {
+        this.isLogin = true
       }
     },
     components: {

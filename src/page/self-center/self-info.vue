@@ -1,10 +1,17 @@
 <template>
   <div id="self-info">
     <div class="head">
-      <h1>个人信息</h1>
-      <h3>
-        {{ userObj.mobilePhone }}
-      </h3>
+      <mu-flexbox>
+        <mu-flexbox-item grow="3">
+          <mu-icon value="chevron_left" :size=30 color="#fff" @click="goBack"/>
+        </mu-flexbox-item>
+        <mu-flexbox-item grow="7">
+          <h1>个人信息</h1>
+          <h3>
+            {{ userObj.mobilePhone }}
+          </h3>
+        </mu-flexbox-item>
+      </mu-flexbox>
     </div>
     <div class="body" :style="{ height: bodyHeight }">
       <mu-text-field hintText="姓名" type="text" icon="person" v-model="userObj.realName"/><br/>
@@ -13,12 +20,18 @@
         <mu-menu-item value="女" title="女"/>
       </mu-select-field>
       <mu-list>
-        <mu-list-item :title="'二维码：' + item.serial" toggleNested v-for="item,index in userObj.eqrCodes" key="item" :open=false>
-          <mu-list-item slot="nested">
-            <mu-text-field hintText="留言"
-                          multiLine
-                          v-model="item.note"
-                          :rows="3" :rowsMax="6" icon="comment"/>
+        <mu-list-item toggleNested title="我激活的二维码">
+          <mu-list-item :title="'编号：' + item.serial"
+                        toggleNested v-for="item,index in userObj.eqrCodes"
+                        key="item"
+                        slot="nested"
+                        :open=false>
+            <mu-list-item slot="nested">
+              <mu-text-field hintText="写点什么给捡到的人呗~"
+                            multiLine
+                            v-model="item.note"
+                            :rows="3" :rowsMax="6" icon="comment"/>
+            </mu-list-item>
           </mu-list-item>
         </mu-list-item>
       </mu-list>
@@ -55,6 +68,10 @@
             }
           })
         }
+      },
+      // 返回
+      goBack () {
+        this.$router.go(-1)
       },
       // 退出登录
       saveInfo () {

@@ -110,8 +110,10 @@
       }
     },
     mounted () {
-      if (global.mobilePhone) {
+      if (window.localStorage.getItem('userObj')) {
         this.isLogin = true
+      } else {
+        this.isLogin = false
       }
       console.log(this.isLogin)
     },
@@ -132,8 +134,6 @@
     .body {
       position: relative;
       z-index: 20;
-      padding: 0px 10%;
-      padding-top: 10%;
       .from-row {
         margin-bottom: 16%;
         position: relative;

@@ -1,14 +1,21 @@
 <template>
   <div id="self-center">
     <div class="head" @click="goSelfInfo">
-      <h1>个人中心</h1>
-      <h3>
-        {{ userObj.mobilePhone }}
-      </h3>
+      <mu-flexbox>
+        <mu-flexbox-item grow="3">
+          <mu-icon value="person" :size=36 color="#fff"/>
+        </mu-flexbox-item>
+        <mu-flexbox-item grow="7">
+          <h1>个人中心</h1>
+          <h3>
+            {{ userObj.mobilePhone }}
+          </h3>
+        </mu-flexbox-item>
+      </mu-flexbox>
     </div>
     <div class="body" :style="{ height: bodyHeight }">
       <mu-list>
-        <mu-list-item :title="'我的二维码（' + userObj.list.length + ')'" toggleNested v-if="userObj.list">
+        <mu-list-item :title="'我的二维码（' + userObj.list.length + ')'" toggleNested v-if="userObj.list" :open=false>
           <mu-list-item slot="nested" :title="item.serial"
                         v-for="item,index in userObj.list"
                         key="item"

@@ -13,7 +13,8 @@
 </template>
 <script>
   import { callRecord, doubleCall } from 'services/service'
-  import { checkData } from 'tools/index'
+	import { checkData } from 'tools/index'
+	import { MessageBox, Toast, Indicator } from 'mint-ui'
   export default {
     data () {
 			return {
@@ -34,15 +35,18 @@
 		methods: {
       // 立即打电话
       immediateCall () {
+				// 被呼叫者的手机号
 				let mobile = JSON.parse(window.localStorage.getItem('codeData')).mobile
 
 				console.log(this.isLogin)
 
         // 判断是否登录,如果登录，就不需要验证码
         if (this.isLogin) {
+					let fromMobile = JSON.parse(window.localStorage.getItem('userObj')).mobilePhone
+
           callRecord.bind(this)({
             codeFlag: 1,
-            fromMobile: global.mobilePhone,
+            fromMobile: fromMobile,
             qrKey: this.qrKey,
             toMobile: mobile
           }).then(res => {
@@ -62,7 +66,19 @@
               toMobile: mobile
             }).then(res => {
               if (res.code === 200) {
-                window.location.href = 'tel:' + mobile
+
+								// 登录
+								login.bind(this)({
+									mobile: this.mobile,
+									code: this.code,
+									type: 'mobile'
+								}).then(res => {
+									if (res.code === 200) {
+										window.location.href = 'tel:' + mobile
+										window.localStorage.setItem('userObj', JSON.stringify(res.dataBody))
+									}
+								})
+
               } else {
                 Toast(res.msg)
               }
@@ -72,28 +88,47 @@
 			},
       // 匿名呼叫
       doubleCall () {
-        let mobile = JSON.parse(window.localStorage.getItem('codeData')).mobile
 
         // 判断是否登录,如果登录，就不需要验证码
         if (this.isLogin) {
-					doubleCall.bind(this)(this.code, this.mobile, this.qrKey, '1').then(res => {
+					let mobile = JSON.parse(window.localStorage.getItem('userObj')).mobilePhone
+
+					doubleCall.bind(this)(this.code, mobile, this.qrKey, '1').then(res => {
 						if (res.code === 200) {
 							Toast('呼叫成功')
 							Indicator.open('呼叫中...')
 							setTimeout(() => {
 								Indicator.close()
 							}, 5000)
+						} else {
+							Toast(res.msg)
 						}
 					})
         } else {
+					// MessageBox.alert('您稍后将收到一个呼叫，确认后才能进行匿名呼叫', '温馨提示').then(action => {
+					// 	console.log(action)
+					// })
           checkData([this.mobile, this.code], ['手机号不能为空', '验证码不能为空'], () => {
 						doubleCall.bind(this)(this.code, this.mobile, this.qrKey, '0').then(res => {
 							if (res.code === 200) {
-								Toast('呼叫成功')
-								Indicator.open('呼叫中...')
-								setTimeout(() => {
-									Indicator.close()
-								}, 5000)
+
+								// 登录
+								login.bind(this)({
+									mobile: this.mobile,
+									code: this.code,
+									type: 'mobile'
+								}).then(res => {
+									if (res.code === 200) {
+										window.localStorage.setItem('userObj', JSON.stringify(res.dataBody))
+										Toast('呼叫成功')
+										Indicator.open('呼叫中...')
+										setTimeout(() => {
+											Indicator.close()
+										}, 5000)
+									}
+								})
+							} else {
+								Toast(res.msg)
 							}
 						})
           })

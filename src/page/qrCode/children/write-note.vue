@@ -17,6 +17,7 @@
       <getCode @code="getCode"
                 @mobile="getMobile"
                 label="手机*"
+                v-if="!isLogin"
                 ref="getCode">
 
       </getCode>
@@ -55,8 +56,10 @@
       return {
         isInvalid: true, // 手机号码是否正确
         hintMessage: '手机号码格式有误',
+        isLogin: false,
         writeData: {
           qrCode: this.$route.params.qrKey,
+          codeFlag: '0',
           fromSex: '', // 留言者性别
           messager: '', // 留言者姓名
           content: '', // 留言内容
@@ -84,10 +87,7 @@
         this.writeData.toUser = this.userId
         let params = [this.writeData.content, this.writeData.fromMobile, this.writeData.code]
         let toasts = ['内容不能为空', '手机号不能为空', '验证码不能为空']
-        checkData(params, toasts, () => {
-
-          // 保存扫码信息
-          saveCode(this)
+        if (this.isLogin) {
           publishNote.bind(this)(this.writeData).then(res => {
             getCheckCode(res, () => {
               Toast('留言成功')
@@ -96,7 +96,21 @@
               Toast(res.msg)
             })
           })
-        })
+        } else {
+          checkData(params, toasts, () => {
+
+            // 保存扫码信息
+            saveCode(this)
+            publishNote.bind(this)(this.writeData).then(res => {
+              getCheckCode(res, () => {
+                Toast('留言成功')
+                this.$router.go(-1)
+              }, () => {
+                Toast(res.msg)
+              })
+            })
+          })
+        }
       },
       // 关闭弹出框
       writePop () {
@@ -125,6 +139,16 @@
         } else {
           this.isInvalid = false
         }
+      }
+    },
+    mounted () {
+      console.log(window.localStorage.getItem('userObj'))
+      if (window.localStorage.getItem('userObj')) {
+        this.isLogin = true
+        this.writeData.fromMobile = JSON.parse(window.localStorage.getItem('userObj')).mobilePhone
+        this.writeData.codeFlag = '1'
+      } else {
+        this.writeData.codeFlag = '0'
       }
     },
     components: {
