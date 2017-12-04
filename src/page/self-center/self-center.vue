@@ -15,7 +15,7 @@
     </div>
     <div class="body" :style="{ height: bodyHeight }">
       <mu-list>
-        <mu-list-item :title="'我的二维码（' + userObj.list.length + ')'" toggleNested v-if="userObj.list" :open=false>
+        <mu-list-item :title="'我的二维码（' + userObj.list.length + ')'" toggleNested v-if="userObj.list" :open=true>
           <mu-list-item slot="nested" :title="item.serial"
                         v-for="item,index in userObj.list"
                         key="item"

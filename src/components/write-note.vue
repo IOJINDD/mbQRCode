@@ -91,7 +91,7 @@
       puslishInfo () {
         this.writeData.toUser = this.userId
         let params = [this.writeData.content, this.writeData.fromMobile, this.writeData.code]
-        let toasts = ['内容不能为空', '手机号不能为空', '验证码不能为空']
+        let toasts = ['请您填写内容', '请您填写手机号', '请您填写验证码']
         checkData(params, toasts, () => {
 
           // 保存扫码信息

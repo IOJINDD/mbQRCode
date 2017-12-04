@@ -26,9 +26,10 @@ function sendLoginVerifyCode (mobilePhone) {
 /**
  * 检测二维码是否被绑定
  * @param {*} qrkey  - 二维码的key值
+ * @param {*} codeType  - 类型
  */
-function checkQRcode (qrkey) {
-  return this.$http.get(urls.checkQRcode + '?qrKey=' + qrkey)
+function checkQRcode (qrkey, codeType) {
+  return this.$http.get(urls.checkQRcode + '?qrKey=' + qrkey + '&codeType=' + codeType)
   .then((resp) => {
     return resp.data
   })
@@ -115,7 +116,7 @@ function userDetail (id, type) {
 }
 
 /**
- * 检测二维码是否被绑定
+ * 保存扫码记录
  * @param {*} params
  */
 function scanRecord (params) {

@@ -31,25 +31,7 @@
   import getCode from 'components/get-code'
   import { Toast } from 'mint-ui'
   import { checkData, getCheckCode } from 'tools/index'
-  import { publishNote, scanRecord }from 'services/service'
-
-  function saveCode (vm) {
-    let infoJson = {
-      createTime: new Date().getTime(), // 创建时间
-      userAgent: navigator.userAgent // 手机型号
-    }
-    scanRecord.bind(vm)({
-      qrKey: vm.writeData.qrCode,
-      area: global.area,
-      city: global.city,
-      street: global.street,
-      province: global.province,
-      codeType: vm.qrCodeType,
-      infoJson: JSON.stringify(infoJson)
-    }).then(res => {
-
-    })
-  }
+  import { publishNote, scanRecord, login }from 'services/service'
 
   export default {
     data () {
@@ -86,21 +68,10 @@
       puslishInfo () {
         this.writeData.toUser = this.userId
         let params = [this.writeData.content, this.writeData.fromMobile, this.writeData.code]
-        let toasts = ['内容不能为空', '手机号不能为空', '验证码不能为空']
+        let toasts = ['请您填写内容', '请您填写手机号', '请您填写验证码']
+        // 判断是否登录
         if (this.isLogin) {
-          publishNote.bind(this)(this.writeData).then(res => {
-            getCheckCode(res, () => {
-              Toast('留言成功')
-              this.$router.go(-1)
-            }, () => {
-              Toast(res.msg)
-            })
-          })
-        } else {
-          checkData(params, toasts, () => {
-
-            // 保存扫码信息
-            saveCode(this)
+          checkData([this.writeData.conten], ['您好歹写一点什么嘛'], () => {
             publishNote.bind(this)(this.writeData).then(res => {
               getCheckCode(res, () => {
                 Toast('留言成功')
@@ -108,6 +79,29 @@
               }, () => {
                 Toast(res.msg)
               })
+            })
+          })
+        } else {
+          checkData(params, toasts, () => {
+
+            // 登录
+            login.bind(this)({
+              mobile: this.writeData.fromMobile,
+              code: this.writeData.code,
+              type: 'mobile'
+            }).then(res => {
+              if (res.code === 200) {
+                window.localStorage.setItem('userObj', JSON.stringify(res.dataBody))
+
+                publishNote.bind(this)(this.writeData).then(res => {
+                  getCheckCode(res, () => {
+                    Toast('留言成功')
+                    this.$router.go(-1)
+                  }, () => {
+                    Toast(res.msg)
+                  })
+                })
+              }
             })
           })
         }

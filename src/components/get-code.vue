@@ -30,18 +30,20 @@
           this.isInvalid = true
           sendLoginVerifyCode.bind(this)(this.mobile).then(res => {
             if (res.code === 200) {
+              Toast('发送成功')
+              time = 60
+              let countDown = setInterval(() => {
+                this.message = '重新发送' + time
+                time--
+                if (time === 0) {
+                  clearInterval(countDown)
+                  this.isInvalid = false
+                  this.message = '获取验证码'
+                }
+              }, 1000)
+            } else {
               Toast(res.msg)
             }
-            time = 60
-            let countDown = setInterval(() => {
-              this.message = '重新发送' + time
-              time--
-              if (time === 0) {
-                clearInterval(countDown)
-                this.isInvalid = false
-                this.message = '获取验证码'
-              }
-            }, 1000)
           })
         } else {
           Toast(this.hintMessage)

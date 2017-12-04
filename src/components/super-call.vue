@@ -12,13 +12,50 @@
   </div>
 </template>
 <script>
-  import { callRecord, doubleCall } from 'services/service'
+  import { callRecord, doubleCall, login } from 'services/service'
 	import { checkData } from 'tools/index'
 	import { MessageBox, Toast, Indicator } from 'mint-ui'
+
+	// 匿名呼叫
+	function anonymousCall (vue, codeFlag) {
+
+		// 判断是否登录
+		if (codeFlag === '1') { // 已登录
+			let mobile = JSON.parse(window.localStorage.getItem('userObj')).mobilePhone
+			doubleCall.bind(vue)(vue.code, mobile, vue.qrKey, codeFlag).then(res => {
+				if (res.code === 200) {
+					Indicator.open('呼叫中...')
+					setTimeout(() => {
+						Indicator.close()
+						vue.callFlag = true
+					}, 5000)
+				} else {
+					Toast(res.msg)
+				}
+			})
+		} else { // 未登录
+			vue.callFlag = true
+			checkData([vue.mobile, vue.code], ['请您填写手机号', '请您填写验证码'], () => {
+				doubleCall.bind(vue)(vue.code, vue.mobile, vue.qrKey, codeFlag).then(res => {
+					if (res.code === 200) {
+						Indicator.open('呼叫中...')
+						setTimeout(() => {
+							Indicator.close()
+							vue.callFlag = true
+						}, 5000)
+					} else {
+						Toast(res.msg)
+					}
+				})
+			})
+		}
+	}
+
   export default {
     data () {
 			return {
-				qrKey: this.$route.params.qrKey
+				qrKey: this.$route.params.qrKey,
+				callFlag: true
 			}
 		},
 		props: {
@@ -57,7 +94,7 @@
             }
           })
         } else {
-          checkData([this.mobile, this.code], ['手机号不能为空', '验证码不能为空'], () => {
+          checkData([this.mobile, this.code], ['请您填写手机号', '请您填写验证码'], () => {
             callRecord.bind(this)({
               code: this.code,
               codeFlag: 0,
@@ -89,50 +126,39 @@
       // 匿名呼叫
       doubleCall () {
 
-        // 判断是否登录,如果登录，就不需要验证码
-        if (this.isLogin) {
-					let mobile = JSON.parse(window.localStorage.getItem('userObj')).mobilePhone
+				// 限制多次呼叫
+				if (this.callFlag) {
 
-					doubleCall.bind(this)(this.code, mobile, this.qrKey, '1').then(res => {
-						if (res.code === 200) {
-							Toast('呼叫成功')
-							Indicator.open('呼叫中...')
-							setTimeout(() => {
-								Indicator.close()
-							}, 5000)
+					console.log(window.localStorage.getItem('noRemind'))
+					if (window.localStorage.getItem('noRemind') !== 'true') {
+						console.log('11')
+						// 判断是否登录,如果登录，就不需要验证码
+						if (this.isLogin) {
+							anonymousCall(this, '1')
 						} else {
-							Toast(res.msg)
+							anonymousCall(this, '0')
 						}
-					})
-        } else {
-					// MessageBox.alert('您稍后将收到一个呼叫，确认后才能进行匿名呼叫', '温馨提示').then(action => {
-					// 	console.log(action)
-					// })
-          checkData([this.mobile, this.code], ['手机号不能为空', '验证码不能为空'], () => {
-						doubleCall.bind(this)(this.code, this.mobile, this.qrKey, '0').then(res => {
-							if (res.code === 200) {
+					} else {
+						MessageBox({
+							title: '温馨提示',
+							message: '稍后您将收到一个呼叫，确认后才能进行匿名呼叫哦！',
+							showCancelButton: true,
+							cancelButtonText: '确定',
+							confirmButtonText: '不再提示'
+						}).then(res => {
+							if (res === 'confirm') {
+								window.localStorage.setItem('noRemind', true)
+							}
 
-								// 登录
-								login.bind(this)({
-									mobile: this.mobile,
-									code: this.code,
-									type: 'mobile'
-								}).then(res => {
-									if (res.code === 200) {
-										window.localStorage.setItem('userObj', JSON.stringify(res.dataBody))
-										Toast('呼叫成功')
-										Indicator.open('呼叫中...')
-										setTimeout(() => {
-											Indicator.close()
-										}, 5000)
-									}
-								})
+							// 判断是否登录,如果登录，就不需要验证码
+							if (this.isLogin) {
+								anonymousCall(this, '1')
 							} else {
-								Toast(res.msg)
+								anonymousCall(this, '0')
 							}
 						})
-          })
-        }
+					}
+				}
       }
 		}
   }

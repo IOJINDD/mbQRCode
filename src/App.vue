@@ -1,11 +1,11 @@
 <template>
-  <div id="app" :style="{minHeight: height}" v-if="bgImg">
+  <div id="app" :style="{minHeight: height + 'px'}" v-if="bgImg">
     <img :src="bgImg" alt="" width="100%" height="100%" class="bgImg">
     <keep-alive>
       <router-view v-if="$route.meta.keepAlive"></router-view>
     </keep-alive>
     <router-view v-if="!$route.meta.keepAlive"></router-view>
-    <div class="bottom">
+    <div class="bottom" v-if="bottomShow">
       <a href="javascript:">
         <img src="./assets/police.png" alt="" width="16px" height="16px">
         浙公网安备：33010802008316号
@@ -32,7 +32,8 @@ export default {
     return {
       qrKey: this.$route.params.qrKey,
       qrKeyArr: [],
-      height: window.screen.height + 'px',
+      height: window.screen.clientHeight,
+      bottomShow: true,
       bgImg,
       type: this.$route.query.type
     }
@@ -56,6 +57,15 @@ export default {
 
       })
     }, 1000)
+    let client = document.documentElement.clientHeight
+    window.onresize = () => {
+      // window.alert()
+      if (client > document.documentElement.clientHeight) {
+        this.bottomShow = false
+      } else {
+        this.bottomShow = true
+      }
+    }
   }
 }
 </script>

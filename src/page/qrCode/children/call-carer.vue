@@ -23,12 +23,6 @@
           个人中心>>
       </div>
     </div>
-    <div style="height: 50px;" v-if="isLogin">
-
-    </div>
-    <div style="height: 30px;" v-if="!isLogin">
-
-    </div>
     <service>
 
     </service>
@@ -47,7 +41,7 @@
         mobile: '', // 呼叫方手机号
         code: '', // 验证码
         isInvalid: true, // 手机号是否正确
-        height: window.screen.height / 5,
+        height: window.screen.height / 10,
         position: {},
         isLogin: false, // 判断是否登录
         hintMessage: '手机号码格式有误', // 提示语
@@ -135,12 +129,12 @@
       position: relative;
       z-index: 20;
       .from-row {
-        margin-bottom: 16%;
+        margin-bottom: 6%;
         position: relative;
       }
       .center {
         text-align: center;
-        padding-top: 40px;
+        padding-top: 8%;
       }
     }
     .mu-text-field-focus-line {

@@ -55,9 +55,7 @@
     },
     beforeRouteEnter: (to, from, next) => {
       next((vm) => {
-        console.log(window.localStorage.getItem('setCodeTime'))
-        console.log(window.localStorage.getItem('qrKeyArr'))
-        checkQRcode.bind(vm)(to.params.qrKey).then(res => {
+        checkQRcode.bind(vm)(to.params.qrKey, to.query.type).then(res => {
           if (res.code === 200) {
             if (res.dataBody && res.dataBody.id) {
               vm.isBind = res.dataBody.isBind

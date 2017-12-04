@@ -1,7 +1,7 @@
 <template>
   <div id="service">
     <div class="service">
-      <img src="../assets/service.png" alt="" width="100%" @click="goShop" height="80%">
+      <img src="../assets/service.png" alt="" width="100%" @click="goShop" height="5%">
     </div>
   </div>
 </template>

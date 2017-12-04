@@ -19,10 +19,11 @@
         <mu-menu-item value="男" title="男"/>
         <mu-menu-item value="女" title="女"/>
       </mu-select-field>
-      <mu-list>
-        <mu-list-item toggleNested title="我激活的二维码">
+      <mu-list v-if="userObj.eqrCodes">
+        <mu-list-item :toggleNested=true
+                      title="我激活的二维码">
           <mu-list-item :title="'编号：' + item.serial"
-                        toggleNested v-for="item,index in userObj.eqrCodes"
+                        :toggleNested=true v-for="item,index in userObj.eqrCodes"
                         key="item"
                         slot="nested"
                         :open=false>

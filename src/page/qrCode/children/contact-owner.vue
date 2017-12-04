@@ -5,9 +5,9 @@
     <div class="body">
       <mu-flexbox align="flex-start">
         <mu-flexbox-item grow="2" class="noteIcon">
-          <mu-icon value="chat" :size=28 color="#9e9e9e"/>
+          <mu-icon value="chat" :size=18 color="#9e9e9e"/>
         </mu-flexbox-item>
-        <mu-flexbox-item grow="10">
+        <mu-flexbox-item grow="12">
           <div class="note">
               {{ codeData.note || '这个用户很懒，什么都没留下' }}
           </div>
@@ -88,11 +88,11 @@
       color: #9e9e9e;
       .noteIcon {
         text-align: right;
-        padding-top: 20px;
+        padding-top: 10px;
       }
       .note {
         font-size: 0.35rem;
-        margin-top: 25px;
+        margin-top: 10px;
         border-left: 1px solid #ccc;
         padding-left: 10px;
         height: 100px;
@@ -102,13 +102,13 @@
       }
       .btn-top {
         text-align: center;
-        padding: 20px 0px;
+        padding: 10px 0px;
         margin: 0px 30px;
         border-top: 1px solid #ccc;
       }
       .center {
         text-align: center;
-        padding-bottom: 20px;
+        padding-bottom: 10px;
       }
     }
   }

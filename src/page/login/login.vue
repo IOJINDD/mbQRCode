@@ -79,7 +79,7 @@
       },
       // 验证码登录
       goMesLogin () {
-        checkData([this.mobile, this.code], ['手机号不能为空', '验证码不能为空'], () => {
+        checkData([this.mobile, this.code], ['请您填写手机号', '请您填写验证码'], () => {
           login.bind(this)({
             mobile: this.mobile,
             code: this.code,

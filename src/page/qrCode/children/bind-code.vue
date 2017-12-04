@@ -14,6 +14,13 @@
         <mu-raised-button backgroundColor="rgb(53, 197, 144)" label="激活" fullWidth @click="bindCode()"/>
       </div>
     </div>
+    <p class="instruction">
+      使用说明： <br>
+      1. "e码"需要扫码激活方能使用。<br>
+      2. 激活成功，TA人扫码即可电话（或者留言）联系您。 <br>
+      3. 一个手机号可以绑定多个"e码"。 <br>
+      4. 客服电话：<span @click="call">400-110-2123</span>，欢迎您来电咨询。
+    </p>
   </div>
 </template>
 <script>
@@ -79,6 +86,9 @@
         } else {
           Toast(this.hintMessage)
         }
+      },
+      call () {
+        window.location.href = 'tel:400-110-2123'
       }
     },
     watch: {
@@ -105,6 +115,13 @@
         }
       }
     },
+    mounted () {
+      // this.$nextTick(() => {
+      //   Array.from(document.querySelectorAll('.mu-text-field-input')).forEach((ele, index) => {
+
+      //   })
+      // })
+    },
     // beforeRouteEnter (to, from, next) {
     //   next((vm) => {
     //     qrNotes.bind(vm)(vm.id).then(res => {
@@ -127,7 +144,7 @@
     .body {
       position: relative;
       z-index: 20;
-      padding: 0px 10%;
+      padding: 0px 5%;
       background-color: #fff;
       padding-bottom: 30px;
       .mu-text-field-focus-line {
@@ -140,7 +157,7 @@
         width: 100%;
       }
       .from-row {
-        padding-top: 48px;
+        padding-top: 10%;
         position: relative;
       }
       .btn-top {
@@ -152,13 +169,19 @@
       }
       .get-code {
         position: absolute;
-        top: 120px;
+        top: 71%;
         right: 1%;
         z-index: 20;
         color: #35c590;
         font-size: 0.37rem;
         font-weight: 100;
       }
+    }
+    .instruction {
+      margin-top: 10%;
+      line-height: 20px;
+      border: 1px solid #fff;
+      padding: 10px;
     }
   }
 </style>

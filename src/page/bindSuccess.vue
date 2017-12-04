@@ -1,11 +1,11 @@
 <template>
   <div id="bindSuccess">
     <div class="top">
-      <img src="../assets/success.png" alt="" width="100%">
+      <img src="../assets/success.png" alt="" width="90%">
       <span class="goIndex" @click="goIndex">返回主页>></span>
     </div>
     <div class="service" @click="goShop">
-      <img src="../assets/service.png" alt="" width="100%">
+      <img src="../assets/service.png" alt="" width="90%">
     </div>
   </div>
 </template>
@@ -39,15 +39,18 @@
     .top {
       width: 100%;
       margin: auto;
+      text-align: center;
       position: relative;
       .goIndex {
         position: absolute;
         bottom: 24px;
-        right: 19px;
+        right: 35px;
+        transform: scale(0.9);
       }
     }
     .service {
       width: 100%;
+      text-align: center;
       margin: auto;
       margin-top: 20px;
     }

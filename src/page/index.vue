@@ -94,7 +94,7 @@
         goPsdLogin () {
           console.log('goPsdLogin')
           console.log(global)
-          checkData([this.psd_phone, this.psd_password], ['手机号不能为空', '密码不能为空'], () => {
+          checkData([this.psd_phone, this.psd_password], ['请您填写手机号', '请您填写密码'], () => {
             login.bind(this)({
               username: this.psd_phone,
               password: this.psd_password
@@ -107,7 +107,7 @@
         goMesLogin () {
           console.log('goMesLogin')
           console.log(global)
-          checkData([this.mobile, this.code], ['手机号不能为空', '验证码不能为空'], () => {
+          checkData([this.mobile, this.code], ['请您填写手机号', '请您填写验证码'], () => {
             login.bind(this)({
               mobile: this.mobile,
               code: this.code,
