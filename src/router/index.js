@@ -10,6 +10,7 @@ import login from 'page/login/login'
 import selfCenter from 'page/self-center/self-center'
 import noteDetail from 'page/self-center/note-detail'
 import selfInfo from 'page/self-center/self-info'
+import codeNote from 'page/self-center/code-note'
 // import bindCode from 'page/bind-code/bind-code'
 import qrCode from 'page/qrCode/qrCode'
 import callOwner from 'page/qrCode/call-owner'
@@ -58,7 +59,14 @@ export default new Router({
     }, {
       path: '/selfInfo',
       name: 'selfInfo',
+      meta: {
+        keepAlive: true
+      },
       component: selfInfo // 个人信息
+    }, {
+      path: '/codeNote',
+      name: 'codeNote',
+      component: codeNote // 二维码留言
     }
   ]
 })

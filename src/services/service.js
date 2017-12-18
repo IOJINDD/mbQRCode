@@ -147,6 +147,17 @@ function saveInfo (params) {
   })
 }
 
+/**
+ * 留言-双向回呼
+ * noteId
+ */
+function noteCall (noteId) {
+  return this.$http.get(urls.noteCall + '?noteId=' + noteId)
+  .then((resp) => {
+    return resp.data
+  })
+}
+
 export {
   sendLoginVerifyCode,
   checkQRcode,
@@ -159,5 +170,6 @@ export {
   scanRecord,
   callRecord,
   qrNotes,
+  noteCall,
   saveInfo
 }

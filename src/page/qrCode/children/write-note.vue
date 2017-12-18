@@ -1,8 +1,8 @@
 <!-- 拾取人填写留言消息 -->
 <template>
   <div id="write-note">
-      <mt-field label="姓名"
-      placeholder="请输入您的姓名" v-model="writeData.messager"></mt-field>
+      <mt-field label="称呼"
+      placeholder="请填写物主对您的称呼" v-model="writeData.messager"></mt-field>
       <mt-field label="留言*"
             placeholder="填写留言信息"
             type="textarea" rows="4"
@@ -68,15 +68,16 @@
       puslishInfo () {
         this.writeData.toUser = this.userId
         let params = [this.writeData.content, this.writeData.fromMobile, this.writeData.code]
-        let toasts = ['请您填写内容', '请您填写手机号', '请您填写验证码']
+        let toasts = ['您好歹写一点什么嘛', '请您填写手机号', '请您填写验证码']
         // 判断是否登录
         if (this.isLogin) {
-          checkData([this.writeData.conten], ['您好歹写一点什么嘛'], () => {
+          checkData([this.writeData.content], ['您好歹写一点什么嘛'], () => {
             publishNote.bind(this)(this.writeData).then(res => {
               getCheckCode(res, () => {
                 Toast('留言成功')
                 this.$router.go(-1)
               }, () => {
+                console.log('11')
                 Toast(res.msg)
               })
             })
@@ -101,6 +102,8 @@
                     Toast(res.msg)
                   })
                 })
+              } else {
+                Toast(res.msg)
               }
             })
           })

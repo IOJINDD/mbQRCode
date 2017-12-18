@@ -9,7 +9,7 @@
           {{ message }}
         </span>
       </div>
-      <div :style="{height: height + 'px'}" v-if="isLogin">
+      <div :style="{height: height}" v-if="isLogin">
 
       </div>
       <div v-if="!isLimit">
@@ -41,7 +41,7 @@
         mobile: '', // 呼叫方手机号
         code: '', // 验证码
         isInvalid: true, // 手机号是否正确
-        height: window.screen.height / 10,
+        height: '2rem',
         position: {},
         isLogin: false, // 判断是否登录
         hintMessage: '手机号码格式有误', // 提示语
@@ -79,18 +79,20 @@
           this.isInvalid = true
           sendLoginVerifyCode.bind(this)(this.mobile, 'LOGIN').then(res => {
             if (res.code === 200) {
+              Toast('发送成功')
+              time = 60
+              let countDown = setInterval(() => {
+                this.message = '重新发送' + time
+                time--
+                if (time === 0) {
+                  clearInterval(countDown)
+                  this.isInvalid = false
+                  this.message = '获取验证码'
+                }
+              }, 1000)
+            } else {
               Toast(res.msg)
             }
-            time = 60
-            let countDown = setInterval(() => {
-              this.message = '重新发送' + time
-              time--
-              if (time === 0) {
-                clearInterval(countDown)
-                this.isInvalid = false
-                this.message = '获取验证码'
-              }
-            }, 1000)
           })
         } else {
           Toast(this.hintMessage)

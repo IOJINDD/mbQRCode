@@ -52,10 +52,10 @@
    * @param {*} successFun -如果返回码为200的话 执行的方法
    */
   function getCheckCode (res, successFun, errorFun) {
-    if (res.code == '200') {
+    console.log('111')
+    if (res.code === 200) {
       successFun()
     } else {
-      Toast(res.msg)
       errorFun()
     }
   }

@@ -1,17 +1,15 @@
 <template>
   <div id="login">
     <h1>登录</h1>
-    <div class="body">
-      <div class="from-row">
-        <mu-text-field hintText="手机号" type="tel" v-model="mobile" icon="phone_iphone"/><br/>
-        <mu-text-field hintText="验证码" type="tel" v-model="code" icon="security"/><br/>
-        <span class="get-code" @click="getCode()">
-          {{ message }}
-        </span>
-      </div>
-      <div class="btn-top">
-        <mu-raised-button backgroundColor="rgb(53, 197, 144)" label="登录" fullWidth @click="goMesLogin()"/>
-      </div>
+    <div class="from-row">
+      <mu-text-field hintText="手机号" type="tel" v-model="mobile" icon="phone_iphone"/><br/>
+      <mu-text-field hintText="验证码" type="tel" v-model="code" icon="security"/><br/>
+      <span class="get-code" @click="getCode()">
+        {{ message }}
+      </span>
+    </div>
+    <div class="btn-top">
+      <mu-raised-button backgroundColor="rgb(53, 197, 144)" label="登录" fullWidth @click="goMesLogin()"/>
     </div>
   </div>
 </template>
@@ -60,18 +58,20 @@
           this.isInvalid = true
           sendLoginVerifyCode.bind(this)(this.mobile, 'LOGIN').then(res => {
             if (res.code === 200) {
+              Toast('发送成功')
+              time = 60
+              let countDown = setInterval(() => {
+                this.message = '重新发送' + time
+                time--
+                if (time === 0) {
+                  clearInterval(countDown)
+                  this.isInvalid = false
+                  this.message = '获取验证码'
+                }
+              }, 1000)
+            } else {
               Toast(res.msg)
             }
-            time = 60
-            let countDown = setInterval(() => {
-              this.message = '重新发送' + time
-              time--
-              if (time === 0) {
-                clearInterval(countDown)
-                this.isInvalid = false
-                this.message = '获取验证码'
-              }
-            }, 1000)
           })
         } else {
           Toast(this.hintMessage)
@@ -109,6 +109,10 @@
 </script>
 <style lang="scss">
   #login {
+    position: relative;
+    z-index: 20;
+    color: #fff;
+    padding: 30% 8%;
     .mu-text-field-hint.show {
       color: #ddd;
     }
@@ -120,15 +124,9 @@
       color: #fff;
       position: relative;
       text-align: center;
-      padding-top: 100px;
       font-size: 1rem;
       letter-spacing: 1rem;
       margin-left: 1rem;
-    }
-    .body {
-      position: relative;
-      z-index: 20;
-      padding: 0px 10%;
     }
     .mu-text-field-focus-line {
       background-color: rgb(53, 197, 144);
@@ -145,6 +143,7 @@
     }
     .btn-top {
       margin-top: 22px;
+      padding: 0px 5%;
     }
     .mu-raised-button-label {
       font-size: 0.4rem;

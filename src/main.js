@@ -6,9 +6,11 @@ import App from './App'
 import router from './router'
 import MintUI from 'mint-ui'
 import MuseUI from 'muse-ui'
+import vueg from 'vueg'
+import axios from 'axios'
 import 'mint-ui/lib/style.css'
 import 'muse-ui/dist/muse-ui.css'
-import axios from 'axios'
+import 'vueg/css/transition-min.css'
 import {
   Indicator,
   Toast
@@ -20,6 +22,7 @@ Vue.prototype.$http = axios
 
 Vue.use(MintUI)
 Vue.use(MuseUI)
+Vue.use(vueg, router)
 
 router.beforeEach((to, from, next) => {
   if (to.meta) {

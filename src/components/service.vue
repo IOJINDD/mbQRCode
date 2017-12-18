@@ -15,7 +15,7 @@
     methods: {
       // 跳转商城
       goShop () {
-        window.location.href = 'https://h5.youzan.com/v2/showcase/homepage?alias=bt4oehte'
+        window.location.href = 'https://h5.youzan.com/v2/tag/f0r9h1z2'
       }
     }
   }

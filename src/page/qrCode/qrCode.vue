@@ -35,6 +35,7 @@
         isBind: true,
         qrKey: this.$route.params.qrKey,
         isLimit: false,
+        qrKeyArr: [],
         codeData: {}, // 二维码信息
         codeType: 'none' // 二维码类型
       }
@@ -71,7 +72,8 @@
                 // 判断是否24小时
                 codeTime = window.localStorage.getItem('setCodeTime')
                 let nowTime = new Date().getTime()
-                if (codeTime + 60000 < nowTime) {
+                if (Number(codeTime) + 60000 < nowTime) {
+                  console.log(window.localStorage.getItem('setCodeTime'))
                   window.localStorage.removeItem('qrKeyArr')
                   window.localStorage.setItem('setCodeTime', new Date().getTime())
                 }
@@ -108,6 +110,7 @@
                   } else {
                     // 如果是，新建一个
                     vm.qrKeyArr.push(vm.qrKey)
+                    console.log(vm.qrKeyArr)
                     window.localStorage.setItem('qrKeyArr', vm.qrKeyArr.join())
                   }
                 } else {

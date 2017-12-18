@@ -1,28 +1,48 @@
 <!-- 联系物主 -->
 <template>
   <div id="contact-owner">
-    <myHead title="联系物主" icon="aaaa"></myHead>
+    <myHead title="联系物主"
+            leftIcon="aaa"
+            rightIcon="person_outline">
+
+    </myHead>
     <div class="body">
       <mu-flexbox align="flex-start">
         <mu-flexbox-item grow="2" class="noteIcon">
           <mu-icon value="chat" :size=18 color="#9e9e9e"/>
         </mu-flexbox-item>
-        <mu-flexbox-item grow="12">
+        <mu-flexbox-item grow="16">
           <div class="note">
               {{ codeData.note || '这个用户很懒，什么都没留下' }}
           </div>
         </mu-flexbox-item>
       </mu-flexbox>
       <div class="btn-top">
-        <mu-raised-button backgroundColor="rgb(53, 197, 144)" label="呼叫物主" @click="callOwner()"/>
-        <mu-raised-button backgroundColor="rgb(53, 197, 144)"
-                          style="margin-left: 30px;"
-                          label="留言物主"
-                          @click="leavingMessage()"/>
+        <mu-flexbox :gutter=8>
+          <mu-flexbox-item>
+            <mu-raised-button backgroundColor="rgb(53, 197, 144)"
+                              icon="phone_in_talk"
+                              :fullWidth=true
+                              label="呼叫物主" @click="callOwner()"/>
+          </mu-flexbox-item>
+          <mu-flexbox-item>
+            <mu-raised-button backgroundColor="rgb(53, 197, 144)"
+                              label="留言物主"
+                              :fullWidth=true
+                              icon="content_paste"
+                              @click="leavingMessage()"/>
+          </mu-flexbox-item>
+          <!-- <mu-flexbox-item>
+            <mu-raised-button backgroundColor="rgb(53, 197, 144)"
+                              icon="person_outline"
+                              :fullWidth=true
+                              label="个人中心" @click="goCenter"/>
+          </mu-flexbox-item> -->
+        </mu-flexbox>
       </div>
-      <div class="center" @click="goCenter">
+      <!-- <div class="center" @click="goCenter">
           个人中心>>
-      </div>
+      </div> -->
     </div>
     <service>
 
@@ -102,9 +122,11 @@
       }
       .btn-top {
         text-align: center;
-        padding: 10px 0px;
-        margin: 0px 30px;
+        padding: 10px 10px;
         border-top: 1px solid #ccc;
+        .material-icons {
+          color: #fff;
+        }
       }
       .center {
         text-align: center;

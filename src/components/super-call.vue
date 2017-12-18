@@ -1,14 +1,19 @@
 <template>
   <div id="super-call">
     <span class="btn" @click="doubleCall">
-			匿名呼叫
+			一键呼叫
 		</span>
-		<span class="middle">
+		<!-- <span class="middle">
 
 		</span>
     <span class="btn" @click="immediateCall">
 			立即呼叫
-		</span>
+		</span> -->
+		<!-- <div class="callBg" v-if="isShow" :style="{height: height + 'px'}">
+			<img src="../assets/head.svg" alt="" class="imgStyle">
+			<p class="masked">请先接听来电，随后将自动拨打对方</p> <br>
+			对方无法看到你的手机号，有效保护隐私
+		</div> -->
   </div>
 </template>
 <script>
@@ -20,29 +25,41 @@
 	function anonymousCall (vue, codeFlag) {
 
 		// 判断是否登录
-		if (codeFlag === '1') { // 已登录
+		if (codeFlag === 1) { // 已登录
 			let mobile = JSON.parse(window.localStorage.getItem('userObj')).mobilePhone
+			// vue.isShow = true
 			doubleCall.bind(vue)(vue.code, mobile, vue.qrKey, codeFlag).then(res => {
 				if (res.code === 200) {
-					Indicator.open('呼叫中...')
-					setTimeout(() => {
-						Indicator.close()
+					// Indicator.open('呼叫中...')
+					// setTimeout(() => {
+					// 	Indicator.close()
+					// 	vue.isShow = false
 						vue.callFlag = true
-					}, 5000)
+					// }, 5000)
+					window.location.href = 'tel:' + res.dataBody
 				} else {
+					// vue.isShow = false
 					Toast(res.msg)
 				}
 			})
 		} else { // 未登录
 			vue.callFlag = true
 			checkData([vue.mobile, vue.code], ['请您填写手机号', '请您填写验证码'], () => {
-				doubleCall.bind(vue)(vue.code, vue.mobile, vue.qrKey, codeFlag).then(res => {
+				// 登录
+				login.bind(vue)({
+					mobile: vue.mobile,
+					code: vue.code,
+					type: 'mobile'
+				}).then(res => {
 					if (res.code === 200) {
-						Indicator.open('呼叫中...')
-						setTimeout(() => {
-							Indicator.close()
-							vue.callFlag = true
-						}, 5000)
+						window.localStorage.setItem('userObj', JSON.stringify(res.dataBody))
+						doubleCall.bind(vue)(vue.code, vue.mobile, vue.qrKey, '1').then(res => {
+							if (res.code === 200) {
+								window.location.href = 'tel:' + res.dataBody
+							} else {
+								Toast(res.msg)
+							}
+						})
 					} else {
 						Toast(res.msg)
 					}
@@ -55,7 +72,9 @@
     data () {
 			return {
 				qrKey: this.$route.params.qrKey,
-				callFlag: true
+				height: document.documentElement.clientHeight,
+				isShow: false, // 是否显示呼叫
+				callFlag: true // 限制多次呼叫
 			}
 		},
 		props: {
@@ -70,6 +89,7 @@
 			}
 		},
 		methods: {
+
       // 立即打电话
       immediateCall () {
 				// 被呼叫者的手机号
@@ -123,40 +143,17 @@
           })
         }
 			},
+
       // 匿名呼叫
       doubleCall () {
 
 				// 限制多次呼叫
 				if (this.callFlag) {
-
-					console.log(window.localStorage.getItem('noRemind'))
-					if (window.localStorage.getItem('noRemind') !== 'true') {
-						console.log('11')
-						// 判断是否登录,如果登录，就不需要验证码
-						if (this.isLogin) {
-							anonymousCall(this, '1')
-						} else {
-							anonymousCall(this, '0')
-						}
+					this.callFlag = false
+					if (this.isLogin) {
+						anonymousCall(this, 1)
 					} else {
-						MessageBox({
-							title: '温馨提示',
-							message: '稍后您将收到一个呼叫，确认后才能进行匿名呼叫哦！',
-							showCancelButton: true,
-							cancelButtonText: '确定',
-							confirmButtonText: '不再提示'
-						}).then(res => {
-							if (res === 'confirm') {
-								window.localStorage.setItem('noRemind', true)
-							}
-
-							// 判断是否登录,如果登录，就不需要验证码
-							if (this.isLogin) {
-								anonymousCall(this, '1')
-							} else {
-								anonymousCall(this, '0')
-							}
-						})
+						anonymousCall(this, 0)
 					}
 				}
       }
@@ -205,22 +202,54 @@
 			@-webkit-keyframes glow {
 				0% {
 					border-color: #132f56;
-					box-shadow: 0 0 5px 5px rgba(100, 187, 255, .2), inset 0 0 5px 5px rgba(100, 187, 255, .1), 0 2px 0 #000;
+					box-shadow: 0 0 5px 5px rgba(100, 187, 255, .2), inset 0 0 5px 5px rgba(100, 187, 255, .1), 0 0px 0 #000;
 				}
 				100% {
 					border-color: #0a224a;
-					box-shadow: 0 0 15px 15px rgba(100, 187, 255, .6), inset 0 0 15px 15px rgba(100, 187, 255, .4), 0 15px 0 #000;
+					box-shadow: 0 0 25px 18px rgba(100, 187, 255, .6), inset 0 0 25px 18px rgba(100, 187, 255, .4), 0 0px 0 #000;
 				}
 			}
 
 			@keyframes glow {
 				0% {
 					border-color: #132f56;
-					box-shadow: 0 0 5px 5px rgba(100, 187, 255, .2), inset 0 0 5px 5px rgba(100, 187, 255, .1), 0 2px 0 #000;
+					box-shadow: 0 0 5px 5px rgba(100, 187, 255, .2), inset 0 0 5px 5px rgba(100, 187, 255, .1), 0 0px 0 #000;
 				}
 				100% {
 					border-color: #0a224a;
-					box-shadow: 0 0 15px 15px rgba(100, 187, 255, .6), inset 0 0 15px 15px rgba(100, 187, 255, .4), 0 15px 0 #000;
+					box-shadow: 0 0 25px 18px rgba(100, 187, 255, .6), inset 0 0 25px 18px rgba(100, 187, 255, .4), 0 0px 0 #000;
+				}
+			}
+			.callBg {
+				width: 100%;
+				background-color: #1b1e27;
+				color: #7e8188;
+				z-index: 99;
+				position: fixed;
+				font-size: 0.4rem;
+				top: 0px;
+				left: 0px;
+				.masked {
+					font-size: 0.5rem;
+					padding-bottom: 10px;
+				}
+				.imgStyle {
+					background-color: #e2e3e6;
+					margin-bottom: 1rem;
+					margin-top: 1.5rem;
+				}
+				@media all and (-webkit-min-device-pixel-ratio:0) and (min-resolution: .001dpcm) {
+						.masked{
+								background-image: -webkit-linear-gradient(left, #7e8188, #fff 25%, #7e8188 50%, #fff 75%, #7e8188);
+								-webkit-text-fill-color: transparent;
+								-webkit-background-clip: text;
+								-webkit-background-size: 200% 100%;
+								-webkit-animation: masked-animation 2s infinite linear;
+						}
+				}
+				@-webkit-keyframes masked-animation {
+						0%  { background-position: 0 0;}
+						100% { background-position: -100% 0;}
 				}
 			}
 		}

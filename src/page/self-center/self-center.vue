@@ -1,3 +1,4 @@
+<!-- 个人中心 -->
 <template>
   <div id="self-center">
     <div class="head" @click="goSelfInfo">
@@ -40,7 +41,7 @@
   export default {
     data () {
       return {
-        bodyHeight: window.screen.height * (1 - 0.4) + 'px',
+        bodyHeight: '11rem',
         userObj: {}
       }
     },
@@ -59,6 +60,7 @@
       // 退出登录
       signOut () {
         window.localStorage.removeItem('userObj')
+        window.localStorage.removeItem('noRemind')
         this.$router.push({
           name: 'login'
         })
@@ -72,7 +74,7 @@
     },
     beforeRouteEnter (to, from, next) {
       next((vm) => {
-        if (JSON.parse(window.localStorage.getItem('userObj'))) {
+        if (window.localStorage.getItem('userObj')) {
           let id  = JSON.parse(window.localStorage.getItem('userObj')).id
           userDetail.bind(vm)(id).then(res => {
             vm.userObj = res.dataBody

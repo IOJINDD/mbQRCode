@@ -1,3 +1,4 @@
+<!-- 个人信息 -->
 <template>
   <div id="self-info">
     <div class="head">
@@ -23,16 +24,12 @@
         <mu-list-item :toggleNested=true
                       title="我激活的二维码">
           <mu-list-item :title="'编号：' + item.serial"
-                        :toggleNested=true v-for="item,index in userObj.eqrCodes"
+                        v-for="item,index in userObj.eqrCodes"
                         key="item"
+                        @click.native="goCode(index)"
                         slot="nested"
                         :open=false>
-            <mu-list-item slot="nested">
-              <mu-text-field hintText="写点什么给捡到的人呗~"
-                            multiLine
-                            v-model="item.note"
-                            :rows="3" :rowsMax="6" icon="comment"/>
-            </mu-list-item>
+            <mu-icon value="keyboard_arrow_right" slot="right"/>
           </mu-list-item>
         </mu-list-item>
       </mu-list>
@@ -60,21 +57,19 @@
     },
     methods: {
       // 查看留言详情
-      openCode (val) {
-        if (val.num > 0) {
-          this.$router.push({
-            name: 'noteDetail',
-            params: {
-              id: val.serial
-            }
-          })
-        }
+      goCode (index) {
+        this.$router.push({
+          name: 'codeNote',
+          query: {
+            id: index
+          }
+        })
       },
       // 返回
       goBack () {
         this.$router.go(-1)
       },
-      // 退出登录
+      // 保存信息
       saveInfo () {
         saveInfo.bind(this)(this.userObj).then(res => {
           if (res.code === 200) {
@@ -86,10 +81,14 @@
     },
     beforeRouteEnter (to, from, next) {
       next((vm) => {
-        if (JSON.parse(window.localStorage.getItem('userObj'))) {
+        // 判断是否登录
+        if (window.localStorage.getItem('userObj')) {
           let id  = JSON.parse(window.localStorage.getItem('userObj')).id
           userDetail.bind(vm)(id, 'codes').then(res => {
             vm.userObj = res.dataBody
+
+            // 本地存储二维码信息
+            window.localStorage.setItem('codeInfo', JSON.stringify(vm.userObj))
           })
 
         } else {
@@ -138,7 +137,7 @@
         font-size: 0.4rem;
       }
       .material-icons {
-        color: #9e9e9e;
+        color: #757575;
         font-size: 0.66rem;
       }
       .mu-item-title {
