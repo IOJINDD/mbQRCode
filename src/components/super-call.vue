@@ -36,10 +36,8 @@
 					// 	vue.isShow = false
 						vue.callFlag = true
 					// }, 5000)
+
 					window.location.href = 'tel:' + res.dataBody
-				} else {
-					// vue.isShow = false
-					Toast(res.msg)
 				}
 			})
 		} else { // 未登录
@@ -56,12 +54,8 @@
 						doubleCall.bind(vue)(vue.code, vue.mobile, vue.qrKey, '1').then(res => {
 							if (res.code === 200) {
 								window.location.href = 'tel:' + res.dataBody
-							} else {
-								Toast(res.msg)
 							}
 						})
-					} else {
-						Toast(res.msg)
 					}
 				})
 			})
@@ -109,8 +103,6 @@
           }).then(res => {
             if (res.code === 200) {
               window.location.href = 'tel:' + mobile
-            } else {
-              Toast(res.msg)
             }
           })
         } else {
@@ -136,8 +128,6 @@
 									}
 								})
 
-              } else {
-                Toast(res.msg)
               }
             })
           })

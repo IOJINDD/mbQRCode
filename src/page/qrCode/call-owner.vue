@@ -80,8 +80,6 @@
                   this.message = '获取验证码'
                 }
               }, 1000)
-            } else {
-              Toast(res.msg)
             }
           })
         } else {

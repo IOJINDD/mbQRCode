@@ -110,7 +110,7 @@
 <script>
   import getCode from 'components/get-code'
   import writeNote from 'components/write-note'
-  import { checkQRcode, bindQRcode, doubleCall, publishNote, scanRecord }from 'services/service'
+  import { checkQRcode, bindQRcode, doubleCall, publishNote }from 'services/service'
   import { MessageBox, Toast, Indicator, Popup } from 'mint-ui'
 
   function saveCode (vm) {
@@ -118,17 +118,6 @@
       createTime: new Date().getTime(), // 创建时间
       userAgent: navigator.userAgent // 手机型号
     }
-    scanRecord.bind(vm)({
-      qrKey: vm.formData.qrKey,
-      // area: global.area,
-      // city: global.city,
-      // street: global.street,
-      // province: global.province,
-      codeType: vm.type,
-      infoJson: JSON.stringify(infoJson)
-    }).then(res => {
-
-    })
   }
 
   export default {

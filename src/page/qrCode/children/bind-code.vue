@@ -57,12 +57,8 @@
                 this.$router.push({
                   name: 'bindSuccess'
                 })
-              } else {
-                Toast(res.msg)
               }
             })
-          } else {
-            Toast(res.msg)
           }
         })
       },
@@ -83,8 +79,6 @@
                   this.message = '获取验证码'
                 }
               }, 1000)
-            } else {
-              Toast(res.msg)
             }
           })
         } else {

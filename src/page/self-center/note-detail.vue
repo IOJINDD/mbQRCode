@@ -68,9 +68,6 @@
               this.callFlag = true
             // }, 5000)
               window.location.href = 'tel:' + res.dataBody
-          } else {
-            // this.isShow = false
-            Toast(res.msg)
           }
         })
       }

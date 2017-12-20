@@ -37,24 +37,13 @@
   import getCode from 'components/get-code'
   import { Toast } from 'mint-ui'
   import { checkData, getCheckCode } from 'tools/index'
-  import { publishNote, scanRecord }from 'services/service'
+  import { publishNote }from 'services/service'
 
   function saveCode (vm) {
     let infoJson = {
       createTime: new Date().getTime(), // 创建时间
       userAgent: navigator.userAgent // 手机型号
     }
-    scanRecord.bind(vm)({
-      qrKey: vm.writeData.qrCode,
-      area: global.area,
-      city: global.city,
-      street: global.street,
-      province: global.province,
-      codeType: vm.qrCodeType,
-      infoJson: JSON.stringify(infoJson)
-    }).then(res => {
-
-    })
   }
 
   export default {

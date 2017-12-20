@@ -1,5 +1,6 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+/* eslint-disable  */
 import Vue from 'vue'
 import App from './App'
 // import vueg from 'vueg'
@@ -41,8 +42,12 @@ axios.interceptors.request.use(function (request) {
 
 // 添加一个响应拦截器
 axios.interceptors.response.use(function (response) {
-  if (response.data.code === '400' && response.data.msg) {
+  if (response.data.code != '200' && response.data.code != '500' && response.data.msg) {
     Toast(response.data.msg)
+  }
+
+  if (response.data.code == '500' || response.data.code == '502' || response.data.code == '504') {
+    window.location = '/#/serviceException'
   }
   MintUI.Indicator.close()
   return response
@@ -50,7 +55,6 @@ axios.interceptors.response.use(function (response) {
   return Promise.reject(err)
 })
 
-/* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,

@@ -31,7 +31,7 @@
   import getCode from 'components/get-code'
   import { Toast } from 'mint-ui'
   import { checkData, getCheckCode } from 'tools/index'
-  import { publishNote, scanRecord, login }from 'services/service'
+  import { publishNote, login }from 'services/service'
 
   export default {
     data () {
@@ -99,11 +99,9 @@
                     Toast('留言成功')
                     this.$router.go(-1)
                   }, () => {
-                    Toast(res.msg)
+                    // Toast(res.msg)
                   })
                 })
-              } else {
-                Toast(res.msg)
               }
             })
           })

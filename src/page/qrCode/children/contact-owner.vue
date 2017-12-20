@@ -13,7 +13,7 @@
         </mu-flexbox-item>
         <mu-flexbox-item grow="16">
           <div class="note">
-              {{ codeData.note || '这个用户很懒，什么都没留下' }}
+              {{ codeData.note || '这个用户很懒，什么都没留下~' }}
           </div>
         </mu-flexbox-item>
       </mu-flexbox>

@@ -15,11 +15,30 @@
       </mu-flexbox>
     </div>
     <div class="body" :style="{ height: bodyHeight }">
-      <mu-text-field hintText="姓名" type="text" icon="person" v-model="userObj.realName"/><br/>
+      <!-- <mu-text-field hintText="姓名" type="text" icon="person" v-model="userObj.realName"/><br/>
       <mu-select-field v-model="userObj.sex" icon="people_outline" hintText="性别">
         <mu-menu-item value="男" title="男"/>
         <mu-menu-item value="女" title="女"/>
-      </mu-select-field>
+      </mu-select-field> -->
+      <mu-list>
+        <mu-list-item title="姓名" @click.native="chooseName">
+          <!-- <mu-icon value="person" slot="left"/> -->
+          <label for="" slot="right">{{ userObj.realName }}</label>
+          <mu-icon value="keyboard_arrow_right" slot="right" :size="20" color="#9e9e9e"/>
+        </mu-list-item>
+        <mu-list-item title="性别">
+          <!-- <mu-icon value="person" slot="left"/> -->
+          <!-- <mu-select-field v-model="userObj.sex" slot="left">
+            <mu-menu-item value="男" title="男"/>
+            <mu-menu-item value="女" title="女"/>
+          </mu-select-field> -->
+          <select name="" id="" v-model="userObj.sex" slot="right" dir="rtl"          >
+            <option value="男">男</option>
+            <option value="女">女</option>
+          </select>
+          <mu-icon value="keyboard_arrow_right" slot="right" :size="20" color="#9e9e9e"/>
+        </mu-list-item>
+      </mu-list>
       <mu-list v-if="userObj.eqrCodes">
         <mu-list-item :toggleNested=true
                       title="我激活的二维码">
@@ -34,24 +53,25 @@
         </mu-list-item>
       </mu-list>
       <!-- <mu-text-field hintText="留言" multiLine :rows="3" :rowsMax="6" icon="comment"/><br/> -->
-      <div class="btn-top">
+      <!-- <div class="btn-top">
         <mu-raised-button backgroundColor="rgb(53, 197, 144)"
                           color="#fff"
                           label="保存信息"
                           fullWidth
                           @click="saveInfo()"/>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
 <script>
   import { userDetail, saveInfo } from 'services/service'
-  import { Toast } from 'mint-ui'
+  import { Toast, MessageBox } from 'mint-ui'
   export default {
     data () {
       return {
         bodyHeight: window.screen.height * (1 - 0.4) + 'px',
-        userObj: {},
+        userObj: { },
+        first: true,
         sex: '' // 性别
       }
     },
@@ -69,14 +89,28 @@
       goBack () {
         this.$router.go(-1)
       },
+      chooseName () {
+        MessageBox.prompt('请输入姓名', '').then(({
+          value, action
+        }) => {
+          this.userObj.realName = value
+          this.saveInfo()
+        }, err => {
+
+        })
+      },
       // 保存信息
       saveInfo () {
         saveInfo.bind(this)(this.userObj).then(res => {
           if (res.code === 200) {
-            Toast('保存成功')
-            this.$router.go(-1)
+            // Toast('保存成功')
           }
         })
+      }
+    },
+    watch: {
+      'userObj.sex': function (val) {
+        this.saveInfo()
       }
     },
     beforeRouteEnter (to, from, next) {
@@ -125,6 +159,14 @@
       background-color: #fff;
       width: 100%;
       overflow: scroll;
+      .mu-item-svg-icon {
+        color: #9E9E9E;
+      }
+      select {
+        color: #757575;
+        background-color: #fff;
+        border: none;
+      }
       .mu-text-field-content {
         padding-top: 8px;
       }
@@ -142,7 +184,7 @@
       }
       .mu-item-title {
         color: #787878;
-        font-size: 0.4rem
+        font-size: 0.36rem
       }
       .mu-item {
         padding: 0px;

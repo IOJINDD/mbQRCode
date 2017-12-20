@@ -6,6 +6,7 @@ import bindSuccess from 'page/bindSuccess'
 // import selfCenter from 'page/self-center'
 import HelloWorld from '@/components/HelloWorld'
 
+import serviceException from 'page/service-exception'
 import login from 'page/login/login'
 import selfCenter from 'page/self-center/self-center'
 import noteDetail from 'page/self-center/note-detail'
@@ -67,6 +68,10 @@ export default new Router({
       path: '/codeNote',
       name: 'codeNote',
       component: codeNote // 二维码留言
+    }, {
+      path: '/serviceException',
+      name: 'serviceException',
+      component: serviceException // 服务器异常
     }
   ]
 })

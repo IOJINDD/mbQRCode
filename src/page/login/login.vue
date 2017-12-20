@@ -91,8 +91,6 @@
               this.$router.push({
                 name: 'index'
               })
-            } else {
-              Toast(res.msg)
             }
           })
         })

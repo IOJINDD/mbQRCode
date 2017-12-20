@@ -21,7 +21,7 @@
 <script>
 import { getWindowHeight } from 'tools/index'
 import bgImg from 'assets/bg.png'
-import { scanRecord } from './services/service.js'
+import { scanRecord, checkQRcode } from './services/service.js'
 function initBodyHeight () {
   let body = document.querySelector('body')
   body.style.minHeight = getWindowHeight() +'px'
@@ -49,13 +49,22 @@ export default {
 
     //  保存扫码信息
     setTimeout(() => {
-      scanRecord.bind(this)({
-        qrKey: this.qrKey,
-        codeType: this.type,
-        infoJson: JSON.stringify(infoJson)
-      }).then(res => {
+      if (this.qrKey) {
 
-      })
+        checkQRcode.bind(this)(this.qrKey, this.type).then(res => {
+          if (res.code === 200 && res.dataBody && res.dataBody.id) {
+            let activeFlag = res.dataBody.isBind ? 1 : 0
+            scanRecord.bind(this)({
+              qrKey: this.qrKey,
+              codeType: this.type,
+              activeFlag: activeFlag,
+              infoJson: JSON.stringify(infoJson)
+            }).then(res => {
+
+            })
+          }
+        })
+      }
     }, 1000)
     let client = document.documentElement.clientHeight
     window.onresize = () => {
