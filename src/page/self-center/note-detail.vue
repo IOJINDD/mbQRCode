@@ -2,7 +2,7 @@
 <template>
   <div id="note-detail">
     <myHead title="留言详情"></myHead>
-    <div class="body" :style="{ height: bodyHeight }" v-for="item,index in qrCodeArr">
+    <div class="body" :style="{ height: bodyHeight }" v-for="item,index in qrCodeArr" v-if="qrCodeArr.length > 0">
       <mu-flexbox align="flex-start">
         <mu-flexbox-item grow="2">
           <span class="noter">
@@ -32,6 +32,9 @@
           <openPhoto :imgPaths="item.imgPaths"></openPhoto>
         </mu-flexbox-item>
       </mu-flexbox>
+    </div>
+    <div class="body" :style="{ height: bodyHeight }" v-if="qrCodeArr.length === 0">
+
     </div>
 
 		<!-- <div class="callBg" v-if="isShow" :style="{height: height + 'px'}">
@@ -83,7 +86,7 @@
     },
     beforeRouteEnter (to, from, next) {
       next((vm) => {
-        qrNotes.bind(vm)(vm.id).then(res => {
+        qrNotes.bind(vm)(vm.id, to.query.codeType).then(res => {
           if (res.code === 200) {
             vm.qrCodeArr = res.dataBody.data
           }

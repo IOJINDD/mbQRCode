@@ -14,6 +14,8 @@
     "axios": "^0.17.0",
     "muse-ui": "^2.1.0",
     "vue": "^2.5.2",
+    "lm-se-client-info": "git+https://github.com/limingtech-front-end/lm-se-client-info.git",
+    "lm-ut-calc-uri-params": "git+https://github.com/limingtech-front-end/lm-ut-calc-uri-params.git",
     "vue-router": "^3.0.1",
     "vueg": "^1.2.6"
   },

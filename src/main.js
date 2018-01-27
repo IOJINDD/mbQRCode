@@ -1,6 +1,9 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 /* eslint-disable  */
+import 'mint-ui/lib/style.css'
+import 'muse-ui/dist/muse-ui.css'
+import 'vueg/css/transition-min.css'
 import Vue from 'vue'
 import App from './App'
 // import vueg from 'vueg'
@@ -9,9 +12,6 @@ import MintUI from 'mint-ui'
 import MuseUI from 'muse-ui'
 import vueg from 'vueg'
 import axios from 'axios'
-import 'mint-ui/lib/style.css'
-import 'muse-ui/dist/muse-ui.css'
-import 'vueg/css/transition-min.css'
 import {
   Indicator,
   Toast
@@ -34,7 +34,12 @@ router.beforeEach((to, from, next) => {
 
 // 添加一个请求拦截器
 axios.interceptors.request.use(function (request) {
-  MintUI.Indicator.open('加载中...')
+  console.log(request.url.indexOf('api/qr/verification'))
+  if (request.url.indexOf('api/qr/verification') > 0 || request.url.indexOf('api/qr/scanRecord') > 0) {
+
+  } else {
+    MintUI.Indicator.open('加载中...')
+  }
   return request
 }, function (err) {
   return Promise.reject(err)
@@ -45,9 +50,9 @@ axios.interceptors.response.use(function (response) {
   if (response.data.code != '200' && response.data.code != '500' && response.data.msg) {
     Toast(response.data.msg)
   }
-
   if (response.data.code == '500' || response.data.code == '502' || response.data.code == '504') {
     window.location = '/#/serviceException'
+    window.localStorage.removeItem('userObj')
   }
   MintUI.Indicator.close()
   return response

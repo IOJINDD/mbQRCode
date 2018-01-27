@@ -2,26 +2,29 @@
 <template>
   <div id="call-carer">
     <div class="body">
-      <div class="from-row" v-if="!isLogin && !isLimit">
-        <mu-text-field hintText="手机号" type="tel" v-model="mobile" icon="phone_iphone"/><br/>
-        <mu-text-field hintText="验证码" type="tel" v-model="code" icon="security"/><br/>
-        <span class="get-code" @click="getCode()">
-          {{ message }}
+      <div class="mobileBody">
+        <mu-text-field hintText="请输入本机号码" v-model="ownMobile" type="tel" @input="inputMobile"/><br/>
+        <span class="subTitle">
+          通话由虚拟号码转接，双方看到的是虚拟号码而非真实号码
         </span>
       </div>
-      <div :style="{height: height}" v-if="isLogin">
-
-      </div>
       <div v-if="!isLimit">
-        <superCall :mobile="mobile"
+        <superCall :ownMobile="ownMobile"
                    :isLogin="isLogin"
                    :code="code" >
 
         </superCall>
       </div>
-      <div class="center" @click="goCenter">
-          个人中心>>
-      </div>
+      <mu-flexbox>
+        <mu-flexbox-item class="left" @click.native="goSms">
+          短信通知
+        </mu-flexbox-item>
+        <mu-flexbox-item class="flex-demo">
+          <div class="center" @click="goCenter">
+            个人中心>>
+          </div>
+        </mu-flexbox-item>
+      </mu-flexbox>
     </div>
     <service>
 
@@ -34,34 +37,18 @@
   import superCall from 'components/super-call'
   import service from 'components/service'
 
-  let time = 0
   export default {
     data () {
       return {
-        mobile: '', // 呼叫方手机号
+        ownMobile: '', // 本机号码
         code: '', // 验证码
+        qrKey: this.$route.params.qrKey,
         isInvalid: true, // 手机号是否正确
         height: '2rem',
         position: {},
         isLogin: false, // 判断是否登录
         hintMessage: '手机号码格式有误', // 提示语
         message: '获取验证码'
-      }
-    },
-    watch: {
-      // 监听手机号格式是否正确
-      mobile: function (val) {
-        if (!(/^1[3|4|5|7|8]\d{9}$/.test(val))) {
-          if (time === 0) {
-            this.isInvalid = true
-            this.hintMessage = '手机号码格式有误'
-          }
-        } else {
-          if (time === 0) {
-            this.isInvalid = false
-            this.hintMessage = '验证已发送，请稍后再试'
-          }
-        }
       }
     },
     props: {
@@ -98,18 +85,34 @@
       },
       // 跳转个人中心
       goCenter () {
+        if (window.localStorage.getItem('userObj')) {
+          this.$router.push({
+            name: 'index'
+          })
+        } else {
+          this.$router.push({
+            name: 'login'
+          })
+        }
+      },
+      // 监听输入框的值
+      inputMobile (val) {
+
+      },
+      // 跳转短信通知界面
+      goSms () {
         this.$router.push({
-          name: 'index'
+          name: 'smsReminding',
+          params: {
+            qrKey: this.qrKey
+          }
         })
       }
     },
     mounted () {
-      if (window.localStorage.getItem('userObj')) {
-        this.isLogin = true
-      } else {
-        this.isLogin = false
+      if (window.localStorage.getItem('ownMobile')) {
+        this.ownMobile = window.localStorage.getItem('ownMobile')
       }
-      console.log(this.isLogin)
     },
     components: {
       superCall,
@@ -119,46 +122,48 @@
 </script>
 <style lang="scss">
   #call-carer {
-    .mu-text-field-hint.show {
-      color: #ddd;
-    }
-    .mu-text-field-input {
-      color: #e0e0e0;
-    }
     .body {
-      position: relative;
-      z-index: 20;
-      .from-row {
-        margin-bottom: 6%;
-        position: relative;
-      }
       .center {
-        text-align: center;
-        padding-top: 8%;
+        text-align: right;
+        padding-top: 40px;
       }
-    }
-    .mu-text-field-focus-line {
-      background-color: rgb(53, 197, 144);
-    }
-    .mu-text-field.focus-state {
-      color: rgb(53, 197, 144);
-    }
-    .mu-text-field {
-      width: 100%;
-      font-size: 0.4rem;
-    }
-    .mu-raised-button-label {
-      font-size: 0.4rem;
-      letter-spacing: 0.3rem;
-    }
-    .get-code {
-      position: absolute;
-      top: 71px;
-      right: 0%;
-      z-index: 20;
-      color: #35c590;
-      font-size: 0.37rem;
-      font-weight: 100;
+      .left {
+        padding-top: 40px;
+        font-size: 0.4rem;
+      }
+      .mobileBody {
+        /* line-height: 2rem; */
+        /* padding-top: 10px; */
+        padding-top: 0.5rem;
+        text-align: center;
+        border: 2px solid #fff;
+        background: rgba(255, 255, 255, 0.18);
+        margin-bottom: 1rem;
+        .mu-text-field-hint {
+          color: rgba(255, 255, 255, 0.4)
+        }
+        .mu-text-field-input {
+          font-size: 0.5rem;
+        }
+        .mu-text-field {
+          width: 11em;
+          margin-bottom: 0px;
+        }
+        .mu-text-field-line {
+          background-color: #bdbdbd;
+        }
+        .subTitle {
+          display: inline-block;
+          padding-bottom: 10px;
+          font-size: 0.3rem;
+          color: #d9d9d9;
+          line-height: 0.5rem;
+        }
+        input {
+          color: #fff;
+          text-align: center;
+        }
+      }
     }
   }
 </style>

@@ -1,4 +1,4 @@
-<!-- 留言物主 -->
+<!-- 留言物主 无用-->
 <template>
   <div id="leaving-message">
     <myHead title="给物主留言"></myHead>

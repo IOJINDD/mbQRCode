@@ -1,7 +1,7 @@
 <template>
   <div id="super-call">
     <span class="btn" @click="doubleCall">
-			一键呼叫
+			免费呼叫
 		</span>
 		<!-- <span class="middle">
 
@@ -21,58 +21,19 @@
 	import { checkData } from 'tools/index'
 	import { MessageBox, Toast, Indicator } from 'mint-ui'
 
-	// 匿名呼叫
-	function anonymousCall (vue, codeFlag) {
-
-		// 判断是否登录
-		if (codeFlag === 1) { // 已登录
-			let mobile = JSON.parse(window.localStorage.getItem('userObj')).mobilePhone
-			// vue.isShow = true
-			doubleCall.bind(vue)(vue.code, mobile, vue.qrKey, codeFlag).then(res => {
-				if (res.code === 200) {
-					// Indicator.open('呼叫中...')
-					// setTimeout(() => {
-					// 	Indicator.close()
-					// 	vue.isShow = false
-						vue.callFlag = true
-					// }, 5000)
-
-					window.location.href = 'tel:' + res.dataBody
-				}
-			})
-		} else { // 未登录
-			vue.callFlag = true
-			checkData([vue.mobile, vue.code], ['请您填写手机号', '请您填写验证码'], () => {
-				// 登录
-				login.bind(vue)({
-					mobile: vue.mobile,
-					code: vue.code,
-					type: 'mobile'
-				}).then(res => {
-					if (res.code === 200) {
-						window.localStorage.setItem('userObj', JSON.stringify(res.dataBody))
-						doubleCall.bind(vue)(vue.code, vue.mobile, vue.qrKey, '1').then(res => {
-							if (res.code === 200) {
-								window.location.href = 'tel:' + res.dataBody
-							}
-						})
-					}
-				})
-			})
-		}
-	}
-
   export default {
     data () {
 			return {
-				qrKey: this.$route.params.qrKey,
-				height: document.documentElement.clientHeight,
-				isShow: false, // 是否显示呼叫
-				callFlag: true // 限制多次呼叫
+				params: {
+					qrKey: this.$route.params.qrKey,
+					codeFlag: '1',
+					codeType: this.$route.query.type
+				},
+				height: document.documentElement.clientHeight
 			}
 		},
 		props: {
-			mobile: {
+			ownMobile: {
 				type: String
 			},
 			code: {
@@ -136,15 +97,20 @@
 
       // 匿名呼叫
       doubleCall () {
-
-				// 限制多次呼叫
-				if (this.callFlag) {
-					this.callFlag = false
-					if (this.isLogin) {
-						anonymousCall(this, 1)
+				this.params.mobile = this.ownMobile
+				if (this.params.mobile) {
+					if ((/^1[3|4|5|7|8]\d{9}$/.test(this.params.mobile))) {
+						doubleCall.bind(this)(this.params).then(res => {
+							if (res.code == 200) {
+								window.location.href = 'tel:' + res.dataBody
+								window.localStorage.setItem('ownMobile', this.params.mobile)
+							}
+						})
 					} else {
-						anonymousCall(this, 0)
+						Toast('号码有误，请再检查一下')
 					}
+				} else {
+					Toast('请填写您的手机号码')
 				}
       }
 		}
@@ -237,10 +203,19 @@
 								-webkit-animation: masked-animation 2s infinite linear;
 						}
 				}
-				@-webkit-keyframes masked-animation {
+				/* @keyframes masked-animation {
 						0%  { background-position: 0 0;}
 						100% { background-position: -100% 0;}
-				}
+				} */
+        @-webkit-keyframes masked-animation {
+            /* 背景从-100px的水平位置，移动到+100px的水平位置。如果要移动Y轴的，设置第二个数值 */
+						0%  { background-position: 0 0;}
+						100% { background-position: -100% 0;}
+        }
+        @keyframes masked-animation {
+						0%  { background-position: 0 0;}
+						100% { background-position: -100% 0;}
+        }
 			}
 		}
 

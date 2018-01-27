@@ -1,18 +1,12 @@
-<!-- 呼叫物主 -->
+<!-- 呼叫物主  无用 -->
 <template>
   <div id="call-owner">
     <div class="body">
-      <div class="from-row" v-if="!isLogin">
-        <mu-text-field hintText="手机号" type="tel" v-model="mobile" icon="phone_iphone"/><br/>
-        <mu-text-field hintText="验证码" type="tel" v-model="code" icon="security"/><br/>
-        <span class="get-code" @click="getCode()">
-          {{ message }}
-        </span>
-      </div>
-      <div :style="{height: height + 'px'}" v-if="isLogin">
+      <div :style="{height: height + 'px'}">
 
       </div>
       <superCall :mobile="mobile"
+                  :codeType="codeType"
                   :isLogin="isLogin"
                   :code="code" >
 
@@ -35,6 +29,7 @@
         mobile: '', // 呼叫方手机号
         code: '', // 验证码
         isInvalid: true, // 手机号是否正确
+        codeType: this.$route.query.codeType, // 码类型
         position: {},
         height: window.screen.height / 4,
         isLogin: false,

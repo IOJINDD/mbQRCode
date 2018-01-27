@@ -1,6 +1,6 @@
 <!-- 扫码 -->
 <template>
-  <div id="qrCode">
+  <div id="qrCode" :style="{minHeight: height + 'px'}">
     <bindCode v-if="!isBind">
 
     </bindCode>
@@ -34,7 +34,8 @@
       return {
         isBind: true,
         qrKey: this.$route.params.qrKey,
-        isLimit: false,
+        height: window.screen.clientHeight,
+        isLimit: false, // 扫码上限
         qrKeyArr: [],
         codeData: {}, // 二维码信息
         codeType: 'none' // 二维码类型
@@ -57,10 +58,18 @@
     beforeRouteEnter: (to, from, next) => {
       next((vm) => {
         checkQRcode.bind(vm)(to.params.qrKey, to.query.type).then(res => {
+          to.query.codeType = to.query.codeType || 'normal'
           if (res.code === 200) {
             if (res.dataBody && res.dataBody.id) {
               vm.isBind = res.dataBody.isBind
               vm.codeData = res.dataBody
+
+              // 解析留言
+              if (vm.codeData.note && vm.codeData.note.indexOf('isCodeType') > -1) {
+                vm.codeData.note = eval('(' + vm.codeData.note.split('isCodeType')[1] + ')')[to.query.codeType]
+              } else {
+                vm.codeData.note = vm.codeData.note
+              }
               // 保存二维码信息
               window.localStorage.setItem('codeData', JSON.stringify(res.dataBody))
 
@@ -95,7 +104,7 @@
                             i = i - 1
                         }
                     }
-                    if (qrKeyArr.length > 9) {
+                    if (qrKeyArr.length > 19) {
                       vm.isLimit = true
                       Toast('今日扫码已上限！')
                     } else {
@@ -133,6 +142,6 @@
     position: relative;
     z-index: 20;
     color: #fff;
-    padding: 8% 5%;
+    padding: 0.5rem 5%;
   }
 </style>

@@ -1,12 +1,5 @@
 <template>
   <div id="my-head">
-    <!-- <mu-icon :value="leftIcon"
-             @click="goBack"
-             color="#fff"
-             :size=28 />
-    <span class="title">
-      {{ title }}
-    </span> -->
     <mu-flexbox :gutter=8>
       <mu-flexbox-item class="text-left">
         <mu-icon :value="leftIcon"
@@ -39,10 +32,15 @@
       },
       // 跳转个人中心
       goCenter () {
-        console.log('111')
-        this.$router.push({
-          name: 'index'
-        })
+        if (window.localStorage.getItem('userObj')) {
+          this.$router.push({
+            name: 'index'
+          })
+        } else {
+          this.$router.push({
+            name: 'login'
+          })
+        }
       }
     },
     props: {

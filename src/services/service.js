@@ -61,11 +61,13 @@ function bindQRcode (data) {
 /**
  * 双向呼叫
  * @param {*} code - 验证码
- * @param {*} phone - 主叫号码
- * @param {*} qrKey - 二维码id
+ * @param {*} mobile - 主叫号码  -必填
+ * @param {*} qrKey - 二维码id  -必填
+ * @param {*} codeFlag - 是否需要验证码
+ * @param {*} codeType - 二维码类型  -必填
  */
-function doubleCall (code, phone, qrKey, codeFlag) {
-  return this.$http.get(urls.doubleCall + '?code=' + code + '&qrKey='+ qrKey + '&mobile=' + phone + '&codeFlag=' + codeFlag)
+function doubleCall (params) {
+  return this.$http.post(urls.doubleCall, params)
     .then((resp) => {
       return resp.data
     })
@@ -97,8 +99,8 @@ function login (params) {
  * 查看留言
  * @param {*} serial
  */
-function qrNotes (serial) {
-  return this.$http.get(urls.qrNotes + '?pageNo=1&pageSize=1000&serial=' + serial)
+function qrNotes (serial, codeType) {
+  return this.$http.get(urls.qrNotes + '?pageNo=1&pageSize=1000&serial=' + serial + '&codeType=' + codeType)
   .then((resp) => {
     return resp.data
   })
@@ -158,6 +160,28 @@ function noteCall (noteId) {
   })
 }
 
+/**
+ * 获取留言数量
+ * serial - 编号
+ */
+function getCallNum (serial) {
+  return this.$http.get(urls.getCallNum + '?serial=' + serial)
+  .then((resp) => {
+    return resp.data
+  })
+}
+
+/**
+ * 短信提醒挪车
+ * @param {*} params
+ */
+function smsReminding (params) {
+  return this.$http.get(urls.smsReminding + '?qrKey=' + params.qrKey + '&carNo=' + params.carNo + '&carNoColor=' + params.carNoColor + '&mobile=' + params.mobile + '&code=' + params.code + '&codeFlag=' + params.codeFlag)
+  .then((resp) => {
+    return resp.data
+  })
+}
+
 export {
   sendLoginVerifyCode,
   checkQRcode,
@@ -169,7 +193,9 @@ export {
   login,
   scanRecord,
   callRecord,
+  getCallNum,
   qrNotes,
   noteCall,
+  smsReminding,
   saveInfo
 }
