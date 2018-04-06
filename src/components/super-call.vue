@@ -1,7 +1,7 @@
 <template>
   <div id="super-call">
     <span class="btn" @click="doubleCall">
-			免费呼叫
+			立即呼叫
 		</span>
 		<!-- <span class="middle">
 

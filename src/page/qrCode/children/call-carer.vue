@@ -3,7 +3,7 @@
   <div id="call-carer">
     <div class="body">
       <div class="mobileBody">
-        <mu-text-field hintText="请输入本机号码" v-model="ownMobile" type="tel" @input="inputMobile"/><br/>
+        <mu-text-field hintText="请输入您的手机号码" v-model="ownMobile" type="tel" @input="inputMobile"/><br/>
         <span class="subTitle">
           通话由虚拟号码转接，双方看到的是虚拟号码而非真实号码
         </span>

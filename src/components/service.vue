@@ -1,11 +1,12 @@
 <template>
   <div id="service">
-    <!-- <span class="codeExplain">e码</span>
+    <span class="codeExplain">e码</span>
     <i class="codeExplain2">——让物品说话的二维码</i>
     <span class="more" @click="goShop"> 查看更多>> </span>
+    <span class="cooperation"> 合作咨询热线：<span @click="call">400-110-2123</span></span>
     <div class="service">
-      <img src="../assets/service.png" alt="" width="100%" @click="goShop" height="5%">
-    </div> -->
+      <img src="../assets/service.png" alt="" width="100%" height="5%">
+    </div>
   </div>
 </template>
 <script>
@@ -19,6 +20,10 @@
       // 跳转商城
       goShop () {
         window.location.href = 'https://h5.youzan.com/v2/tag/f0r9h1z2'
+      },
+
+      call () {
+        window.location.href = 'tel:400-110-2123'
       }
     }
   }
@@ -30,6 +35,12 @@
     .service {
       margin-top: 20px;
       width: 100%;
+    }
+    .cooperation {
+      position: absolute;
+      bottom: 8px;
+      padding: 8px 12px;
+      color: #999;
     }
     .codeExplain {
       position: absolute;

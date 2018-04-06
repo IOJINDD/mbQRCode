@@ -58,7 +58,8 @@
     beforeRouteEnter: (to, from, next) => {
       next((vm) => {
         checkQRcode.bind(vm)(to.params.qrKey, to.query.type).then(res => {
-          to.query.codeType = to.query.codeType || 'normal'
+          vm.codeType = to.query.type || 'normal'
+          console.log(to.query.type)
           if (res.code === 200) {
             if (res.dataBody && res.dataBody.id) {
               vm.isBind = res.dataBody.isBind
@@ -66,7 +67,12 @@
 
               // 解析留言
               if (vm.codeData.note && vm.codeData.note.indexOf('isCodeType') > -1) {
-                vm.codeData.note = eval('(' + vm.codeData.note.split('isCodeType')[1] + ')')[to.query.codeType]
+                try {
+                  vm.codeData.note = eval('(' + vm.codeData.note.split('isCodeType')[1] + ')')[vm.codeType]
+                } catch (e) {
+                  let str = vm.codeData.note.split('isCodeType')[1].split('":"')[1]
+                  vm.codeData.note  = str.slice(0, str.length - 2)
+                }
               } else {
                 vm.codeData.note = vm.codeData.note
               }

@@ -1,7 +1,7 @@
 <!-- 二维码激活 -->
 <template>
   <div id="bind-code">
-    <myHead title="二维码激活" icon="aaaa"></myHead>
+    <myHead title="二维码激活" icon="aaaa" leftIcon="bbb"></myHead>
     <div class="body">
       <div class="from-row">
         <mu-text-field hintText="手机号" type="tel" v-model="formData.mobile" icon="phone_iphone"/><br/>
@@ -41,7 +41,9 @@
         isInvalid: true,
         hintMessage: '手机号码格式有误', // 提示语
         message: '获取验证码',
-        formData: {},
+        formData: {
+          mobile: ''
+        },
         ISWX: false,
         qrCodeArr: []
       }
@@ -101,7 +103,7 @@
     },
     watch: {
       'formData.mobile': function (val) {
-        if (!(/^1[3|4|5|7|8]\d{9}$/.test(val))) {
+        if (!(/^1[3|4|5|6|7|8|9]\d{9}$/.test(val))) {
           if (time === 0) {
             this.isInvalid = true
             this.hintMessage = '手机号码格式有误'
@@ -124,6 +126,10 @@
       }
     },
     mounted () {
+      if (window.localStorage.getItem('userObj')) {
+        this.formData.mobile = JSON.parse(window.localStorage.getItem('userObj')).mobilePhone
+        console.log(this.formData.mobile )
+      }
       setTimeout(() => {
         this.ISWX = global.ISWX
       }, 1000)
@@ -165,6 +171,18 @@
       .from-row {
         padding-top: 0.5rem;
         position: relative;
+        .mu-text-field-icon {
+          left: 4px;
+        }
+        .mu-text-field.has-icon {
+          padding-left: 38px;
+        }
+        .mu-text-field.has-icon .mu-text-field-line {
+          left: 29px;
+        }
+        .mu-text-field.has-icon .mu-text-field-focus-line {
+          left: 29px;
+        }
       }
       .btn-top {
         margin-top: 32px;
@@ -185,7 +203,7 @@
       .remind {
         text-align: center;
         display: inline-block;
-        width: 90%;
+        margin-left: 11%;
         position: absolute;
         transform: scale(1.3);
         text-align: center;

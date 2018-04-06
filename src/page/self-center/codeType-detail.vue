@@ -52,6 +52,8 @@
       // 保存信息
       saveInfo () {
         if (this.codeInfo.note && this.codeInfo.note.indexOf('isCodeType') > -1) {
+          this.codeInfo.note = this.codeInfo.note.replace(/\n/g, '')
+          console.log(this.codeInfo.note)
           let codeType = eval('(' + this.codeInfo.note.split('isCodeType')[1] + ')')
           codeType[this.codeType] = this.note
           this.codeInfo.note = 'isCodeType' + JSON.stringify(codeType)
@@ -77,9 +79,16 @@
       next((vm) => {
         vm.userObj = JSON.parse(window.localStorage.getItem('codeInfo'))
         vm.codeInfo = vm.userObj.eqrCodes[to.query.id]
+        vm.codeInfo.note = vm.codeInfo.note.replace(/\n/g, '')
+        console.log(vm.codeInfo.note)
         // 解析留言
         if (vm.codeInfo.note && vm.codeInfo.note.indexOf('isCodeType') > -1) {
-          vm.note = eval('(' + vm.codeInfo.note.split('isCodeType')[1] + ')')[to.query.codeType]
+          try {
+            vm.note = eval('(' + vm.codeInfo.note.split('isCodeType')[1] + ')')[to.query.codeType]
+          } catch (e) {
+            let str = vm.codeInfo.note.split('isCodeType')[1].split('":"')[1]
+            vm.note  = str.slice(0, str.length - 2)
+          }
         } else {
           vm.note = vm.codeInfo.note
         }

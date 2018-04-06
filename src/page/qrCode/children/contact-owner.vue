@@ -12,14 +12,12 @@
           <mu-icon value="chat" :size=18 color="#9e9e9e"/>
         </mu-flexbox-item>
         <mu-flexbox-item grow="12">
-          <div class="note">
-              {{ codeData.note || '如捡到此物，您可以输入您的手机号联系我，好人一生平安！' }}
-          </div>
+          <pre class="note">{{ codeData.note || '如捡到此物，您可以输入您的手机号联系我，好人一生平安！' }}</pre>
         </mu-flexbox-item>
       </mu-flexbox>
       <div class="btn-top">
         <div class="mobileBody">
-          <mu-text-field hintText="请输入本机号码" v-model="params.mobile" type="tel"/><br/>
+          <mu-text-field hintText="请输入您的手机号码" v-model="params.mobile" type="tel"/><br/>
           <span class="subTitle">
             通话由虚拟号码转接，双方看到的是虚拟号码而非真实号码
           </span>
@@ -29,7 +27,7 @@
             <mu-raised-button backgroundColor="rgb(53, 197, 144)"
                               icon="phone_in_talk"
                               :fullWidth=true
-                              label="免费呼叫" @click="callOwner()"/>
+                              label="立即呼叫" @click="callOwner()"/>
           </mu-flexbox-item>
           <!-- <mu-flexbox-item>
             <mu-raised-button backgroundColor="rgb(53, 197, 144)"
@@ -165,8 +163,8 @@
         font-size: 0.4rem;
         margin-top: 15px;
         border-left: 1px solid #ccc;
-        padding-left: 5px;
-        height: 160px;
+        padding-left: 4px;
+        height: 80px;
         margin-bottom: 15px;
         overflow: scroll;
         line-height: 0.5rem;
@@ -174,7 +172,7 @@
       .btn-top {
         text-align: center;
         /* padding: 10px 10px; */
-        padding: 1rem 10px;
+        padding: 0.5rem 10px;
         border-top: 1px solid #ccc;
         .material-icons {
           color: #fff;

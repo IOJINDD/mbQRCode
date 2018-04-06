@@ -64,7 +64,7 @@ export default {
       isAdvert: true, // 广告是否展示
       advert, // 广告图片
       advert2, // 广告图片
-      second: 2, // 广告时间
+      second: 4, // 广告时间
       type: this.$route.query.type
     }
   },
