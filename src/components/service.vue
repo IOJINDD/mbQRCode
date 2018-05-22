@@ -41,6 +41,7 @@
       bottom: 8px;
       padding: 8px 12px;
       color: #999;
+      font-size: 0.36rem;
     }
     .codeExplain {
       position: absolute;
