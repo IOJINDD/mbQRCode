@@ -24,11 +24,11 @@
         跳过 <span class="time">{{ second }}</span>
       </span>
       <swipe :auto="2000" class="my-swipe" :style="{height: height + 'px'}">
-        <swipe-item :style="{height: height + 'px'}">
+        <!-- <swipe-item :style="{height: height + 'px'}">
           <div>
             <img :src="advert2" alt="" width="100%" @click="goShopping" >
           </div>
-        </swipe-item>
+        </swipe-item> -->
         <swipe-item :style="{height: height + 'px'}">
           <div>
             <img :src="advert" alt="" width="100%" @click="goShopping" >
@@ -45,7 +45,7 @@ import clientInfo from 'lm-se-client-info'
 import { Swipe, SwipeItem } from 'mint-ui'
 import bgImg from 'assets/bg.png'
 import advert from 'assets/advert.png'
-import advert2 from 'assets/advert2.png'
+// import advert2 from 'assets/advert2.png'
 import { scanRecord, checkQRcode } from './services/service.js'
 function initBodyHeight () {
   let body = document.querySelector('body')
@@ -63,7 +63,7 @@ export default {
       showImg: true,
       isAdvert: true, // 广告是否展示
       advert, // 广告图片
-      advert2, // 广告图片
+      // advert2, // 广告图片
       second: 4, // 广告时间
       type: this.$route.query.type
     }

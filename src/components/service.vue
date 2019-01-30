@@ -1,8 +1,8 @@
 <template>
-  <div id="service">
+  <div id="service"  @click="goShop">
     <span class="codeExplain">e码</span>
     <i class="codeExplain2">——让物品说话的二维码</i>
-    <span class="more" @click="goShop"> 查看更多>> </span>
+    <span class="more"> 查看更多>> </span>
     <span class="cooperation"> 合作咨询热线：<span @click="call">400-110-2123</span></span>
     <div class="service">
       <img src="../assets/service.png" alt="" width="100%" height="5%">
